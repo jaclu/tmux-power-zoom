@@ -13,9 +13,7 @@ This plugin zooms panes into a new window, so that it is convenient to open supp
 The temp window is named using title and ID of the zoomed pane, so that if other panes were open and it is left running, it will later be a hint as the pupose of that window.
 
 ## Usage
-Hit `<prefix>` + `@power_zoom_trigger` to toggle Power Zoom.
-
-Dependencies
+Hit `<prefix>` + `@power_zoom_trigger` to toggle Power Zoom. If `@power_zoom_mouse` is enabled, right double click also toggles Power Zoom.
 
 ## Install
 
@@ -43,21 +41,12 @@ Add this line to the bottom of `.tmux.conf`:
 
 Reload TMUX environment with `$ tmux source-file ~/.tmux.conf`, and that's it.
 
-## Configuration
+## Configuration Options
 
-### Changing the key-bindings for this plugin
-
-The default trigger is `<prefix> Z`. Trigger is selected like this:
- 
-```
-set -g @power_zoom_trigger Z
-```
-
-This enables Power zoom when pane is double-clicked with the right mouse button
-
-```
-set -g @power_zoom_mouse 1
-```
+Option | Default | Description
+-|-|-
+`@power_zoom_trigger`| Z | Key that triggers Power Zoom to toggle
+`@power_zoom_mouse`  | 0 | If set to 1, right double click toggles Power Zoom
 
 
 ## Contributing
