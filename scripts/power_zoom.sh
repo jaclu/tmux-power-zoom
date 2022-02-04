@@ -5,15 +5,16 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.1 2022-02-04
+#   Version: 0.0.2 2022-02-04
 #
-
+#   This tracks the placeholder pane by its pane title, this works regardless
+#   if pane titles are displayed or not.
+#
 power_zoom() {
     primary_pane_id="$(tmux display -p '#D')"
     primary_pane_title="$(tmux display -p '#T')"
 
     placeholder_title="=== POWER ZOOM === place-holder for pane: $primary_pane_id"
-
     placeholder_pane=$(tmux list-panes -a -F "#D #T" | grep "$placeholder_title" | awk '{ print $1 }')
 
     if [ -n "$placeholder_pane" ]; then
@@ -34,7 +35,11 @@ power_zoom() {
             tmux display "This is a Power-Zoom placeholder!"
             return
         fi
-        tmux split-window -b ''
+	#
+	# the pane would close when the process is terminated, so keep a long sleep going for ever
+	# Ctrl-C would exit script and pane would close.
+	#
+        tmux split-window -b "echo; echo \"  $placeholder_title\"; while true ; do sleep 30; done"
         tmux select-pane -T "$placeholder_title"
         tmux select-pane -t "$primary_pane_id"
         tmux break-pane
