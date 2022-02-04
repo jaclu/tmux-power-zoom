@@ -18,7 +18,7 @@ SCRIPTS_DIR="$CURRENT_DIR/scripts"
 #
 #  In shell script unlike in tmux, backslash needs to be doubled inside quotes.
 #
-default_key="z"
+default_key="Z"
 
 
 #
