@@ -36,7 +36,6 @@ log_it() {
 
 check_1_0_param() {
     param_name="$1"
-
     param_value=$(get_tmux_option "$param_name" "0")
 
     case "$param_value" in
@@ -52,8 +51,8 @@ check_1_0_param() {
             ;;
         
         *)
-            log_it "Invalid without_prefix value"
-            tmux display 'ERROR: "$param_name" should be 0 or 1, was: $param_value'
+            log_it "Invalid $param_name value - [$param_value]"
+            tmux display "ERROR: \"$param_name\" should be 0 or 1, was: $param_value"
             exit 0  # Exit 0 wont throw a tmux error            
     esac
 }
