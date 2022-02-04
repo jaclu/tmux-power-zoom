@@ -12,7 +12,7 @@ power_zoom() {
     primary_pane_id="$(tmux display -p '#D')"
     primary_pane_title="$(tmux display -p '#T')"
 
-    placeholder_title="$primary_pane_id place holder pane"
+    placeholder_title="=== POWER ZOOM === place-holder for pane: $primary_pane_id"
 
     placeholder_pane=$(tmux list-panes -a -F "#D #T" | grep "$placeholder_title" | awk '{ print $1 }')
 
@@ -30,7 +30,11 @@ power_zoom() {
             tmux display "Only one pane in this window!"
             return
         fi
-        tmux split-window -b
+        if [ "$(tmux display -p '#{pane_dead}')" -eq 1 ]; then
+            tmux display "This is a Power-Zoom placeholder!"
+            return
+        fi
+        tmux split-window -b ''
         tmux select-pane -T "$placeholder_title"
         tmux select-pane -t "$primary_pane_id"
         tmux break-pane
