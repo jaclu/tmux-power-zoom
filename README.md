@@ -1,8 +1,8 @@
 # tmux-power-zoom
 
-Zoom pane to separate window, and unzoom back into original location
+Zoom pane to separate window, and unzoom back into original location.
 
-Popup menus to help with managing your environment.
+This way you can open other panes whilst focusing on the zoomed pane, without risking to get a crowded mess of panes.
 
 ## Purpose
 
