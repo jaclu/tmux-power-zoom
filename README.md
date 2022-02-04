@@ -6,9 +6,11 @@ Popup menus to help with managing your environment.
 
 ## Purpose
 
-Quite often when I zoom a window work in it for a while and then figure out I need to open a pane to check something I have completely forgotten I am working in a zoomed pane, so as I open a new pane the original pane suddenly becomes squeezed in next to this new pane.
+Quite often when I zoom a pane, work in it for a while and then figure out I need to open a pane to check something I have completely forgotten I am working in a zoomed pane, so as I open a new pane the new pane suddenly becomes squeezed in next to the original pane, often far to small to be practicaly usable.
 
-This plugin zooms panes into a new window, so that it is convenient to open support panes. Hitting Smart Zoom again will move the pane back to it's original location, if no other panes are present the temp window is closed,
+This plugin zooms panes into a new window, so that it is convenient to open support panes. Hitting Smart Zoom again will move the pane back to it's original location, if no other panes are present the temp window is closed. 
+
+The temp window is named using title and ID of the zoomed pane, so that if other panes were open and it is left running, it will later be a hint as the pupose of that window.
 
 ## Usage
 
