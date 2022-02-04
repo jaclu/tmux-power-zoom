@@ -2,7 +2,7 @@
 
 Zoom pane to separate window, and unzoom back into the original location.
 
-This way you can open other panes whilst focusing on the zoomed pane, without risking to get a crowded mess of panes.
+This way you can open other panes whilst focusing on the zoomed pane, without risking getting a crowded mess of panes.
 
 ## Purpose
 
