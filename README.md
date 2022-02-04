@@ -17,7 +17,13 @@ The temp window is named using title and ID of the zoomed pane, so that if other
 Once installed, hit the trigger to get the main menu to popup.
 Default is ``` <prefix> Z ``` see Configuration below for how to change it.
 
+Dependencies
+
 ## Install
+
+#### Dependencies
+
+`tmux 2.6` or higher.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
