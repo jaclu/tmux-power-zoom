@@ -1,4 +1,12 @@
 #!/bin/sh
+#
+#   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
+#   License: MIT
+#
+#   Part of https://github.com/jaclu/tmux-power-zoom
+#
+#   Version: 0.0.1 2022-02-04
+#
 
 power_zoom() {
     primary_pane_id="$(tmux display -p '#D')"
@@ -29,6 +37,5 @@ power_zoom() {
         tmux rename-window "Power Zoom $primary_pane_title ($primary_pane_id)"
     fi
 }
-
 
 power_zoom
