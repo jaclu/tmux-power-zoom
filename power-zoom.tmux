@@ -25,7 +25,7 @@ default_key="z"
 #  If log_file is empty or undefined, no logging will occur, so normally
 #  comment it out for normal usage.
 #
-log_file="/tmp/tmux-power-zoom.log"
+#log_file="/tmp/tmux-power-zoom.log"
 
 
 
