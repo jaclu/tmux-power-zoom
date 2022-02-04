@@ -13,9 +13,7 @@ This plugin zooms panes into a new window, so that it is convenient to open supp
 The temp window is named using title and ID of the zoomed pane, so that if other panes were open and it is left running, it will later be a hint as the pupose of that window.
 
 ## Usage
-
-Once installed, hit the trigger to get the main menu to popup.
-Default is ``` <prefix> Z ``` see Configuration below for how to change it.
+Hit `<prefix>` + `@power_zoom_trigger` to toggle Power Zoom.
 
 Dependencies
 
@@ -60,13 +58,6 @@ This enables Power zoom when pane is double-clicked with the right mouse button
 ```
 set -g @power_zoom_mouse 1
 ```
-
-## Compatability
-
-| Version| Notice |
-| -------| ------------- |
-| 3.2 -   | Fully compatible  |
-| 3.0 - 3.1c | Menu centering not supported, will be displayed top left if C is used as menu location. <br>Additionally some actions might not work depending on version. <br> There should be a notification message about "unknown command" in such casses. |
 
 
 ## Contributing
