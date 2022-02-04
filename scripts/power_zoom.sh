@@ -34,7 +34,7 @@ power_zoom() {
         tmux select-pane -T "$placeholder_title"
         tmux select-pane -t "$primary_pane_id"
         tmux break-pane
-        tmux rename-window "Power Zoom $primary_pane_title ($primary_pane_id)"
+        tmux rename-window "**POWER ZOOM** $primary_pane_title ($primary_pane_id)"
     fi
 }
 
