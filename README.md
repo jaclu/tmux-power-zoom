@@ -46,6 +46,7 @@ Reload TMUX environment with `$ tmux source-file ~/.tmux.conf`, and that's it.
 Option | Default | Description
 -|-|-
 `@power_zoom_trigger`| Z | Key that triggers Power Zoom to toggle
+`@power_zoom_without_prefix`| 0 | If set to 1, trigger key is independent of `<prefix>`
 `@power_zoom_mouse`  | 0 | If set to 1, right double click toggles Power Zoom
 
 
