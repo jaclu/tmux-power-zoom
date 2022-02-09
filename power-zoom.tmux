@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-menus
 #
-#   Version: 0.0.1 2022-02-04
+#   Version: 0.0.2 2022-02-09
 #
 
 
@@ -58,5 +58,7 @@ else
 fi
 
 if [ "$mouse_zoom" -eq 1 ]; then
-    tmux bind -n DoubleClick3Pane run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    # -t '{mouse}' binds the action to the mouse-overed pane
+    # TODO: Figure out how to use it in this context!
+    tmux bind -n DoubleClick3Pane run-shell"$SCRIPTS_DIR"/power_zoom.sh
 fi
