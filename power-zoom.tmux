@@ -3,50 +3,46 @@
 #   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
 #   License: MIT
 #
-#   Part of https://github.com/jaclu/tmux-menus
+#   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.2 2022-02-09
+#   Version: 0.0.3 2022-02-16
 #
 
-
+# shellcheck disable=SC1007
 CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 SCRIPTS_DIR="$CURRENT_DIR/scripts"
 
+# shellcheck disable=SC1091
 . "$SCRIPTS_DIR/utils.sh"
 
+
 #
-#  In shell script unlike in tmux, backslash needs to be doubled inside quotes.
+#  By using Z as default we don't overwrite the default zoom binding
+#  unless the caller actually want this to happen.
 #
 default_key="Z"
 
 
 #
-#  If log_file is empty or undefined, no logging will occur, so normally
-#  comment it out for normal usage.
-#
-#log_file="/tmp/tmux-power-zoom.log"
-
-
-
-#
-#  Make it easy to see when a log run occured, also makes it easier
+#  Make it easy to see when a log run occurred, also makes it easier
 #  to separate runs of this script
 #
 log_it ""  # Trigger LF to separate runs of this script
 log_it "$(date)"
 
 
+
 trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 log_it "trigger_key=[$trigger_key]"
 
-check_1_0_param "@power_zoom_without_prefix"
-without_prefix="$param_verified"
+# shellcheck disable=SC2154
+without_prefix=$(check_1_0_param "@power_zoom_without_prefix")
 log_it "without_prefix=[$without_prefix]"
 
-check_1_0_param "@power_zoom_mouse"
-mouse_zoom="$param_verified"
+mouse_zoom=$(check_1_0_param "@power_zoom_mouse")
 log_it "mouse_zoom=[$mouse_zoom]"
+
 
 
 if [ "$without_prefix" -eq 1 ]; then
@@ -58,7 +54,9 @@ else
 fi
 
 if [ "$mouse_zoom" -eq 1 ]; then
-    # -t '{mouse}' binds the action to the mouse-overed pane
-    # TODO: Figure out how to use it in this context!
-    tmux bind -n DoubleClick3Pane run-shell"$SCRIPTS_DIR"/power_zoom.sh
+    #
+    #  First select the mouse-over pane, then trigger zoom, otherwise the
+    #  focused pane would get zoomed, and not the clicked one.
+    #
+    tmux bind -n DoubleClick3Pane "select-pane -t= ; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
 fi
