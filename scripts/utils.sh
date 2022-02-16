@@ -5,27 +5,34 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.1 2022-02-04
+#   Version: 0.0.3 2022-02-16
 #
 #  Common stuff
 #
+#  Since this is a POSIX script, all variables are global. To ensure that
+#  a function does not overwrite a value for a caller, it's good practice
+#  to always use function related prefixes on all variable names.
+#
 
 get_tmux_option() {
-    local option=$1
-    local default_value=$2
-    local option_value=$(tmux show-option -gqv "$option")
-    if [ -z "$option_value" ]; then
-        echo "$default_value"
+    gto_option=$1
+    gto_default_value=$2
+    gto_value=$(tmux show-option -gqv "$gto_option")
+    if [ -z "$gto_value" ]; then
+        echo "$gto_default_value"
     else
-        echo "$option_value"
+        echo "$gto_value"
     fi
 }
 
 
 
 #
-#  If $log_file is empty or undefined, no logging will occur.
+#  If log_file is empty or undefined, no logging will occur, so normally
+#  comment it out for normal usage.
 #
+#log_file="/tmp/tmux-power-zoom.log"
+
 log_it() {
     if [ -z "$log_file" ]; then
         return
@@ -34,25 +41,32 @@ log_it() {
 }
 
 
+#
+#  If value is not defined, set it to 0
+#  If Value is set to be 1/0 use that value
+#  Accept a few alternative common positives as 1
+#  Display error for other values
+#
 check_1_0_param() {
-    param_name="$1"
-    param_value=$(get_tmux_option "$param_name" "0")
+    c10p_option="$1"
+    c10p_value=$(get_tmux_option "$c10p_option" "0")
 
-    case "$param_value" in
+    case "$c10p_value" in
         
-        "0" | "1" )  # expected params
-            param_verified="$param_value"
+        "0" | "1" )  # expected values
+            echo "$c10p_value"
 	    ;;
         
         "yes" | "Yes" | "YES" | "true" | "True" | "TRUE" )
 	    #  Be a nice guy and accept some common positives
-            log_it "Converted incorret positive to 1"
-            param_verified=1
+            log_it "Converted incorrect positive to 1"
+            # shellcheck disable=SC2034
+            echo 1
             ;;
         
         *)
-            log_it "Invalid $param_name value - [$param_value]"
-            tmux display "ERROR: \"$param_name\" should be 0 or 1, was: $param_value"
+            log_it "Invalid $c10p_option value - [$c10p_value]"
+            tmux display "ERROR: \"$c10p_option\" should be 0 or 1, was: $c10p_value"
             exit 0  # Exit 0 wont throw a tmux error            
     esac
 }
