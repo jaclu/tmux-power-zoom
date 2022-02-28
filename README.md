@@ -1,8 +1,10 @@
 # tmux-power-zoom
 
-Zoom pane to separate window, and unzoom back into the original location.
+Zoom pane to separate window, and un-zoom back into the original location.
 
 This way you can open other panes whilst focusing on the zoomed pane, without risking getting a crowded mess of panes.
+
+You can now trigger the power-zoom action also on the place-holder pane, and it will be restored!
 
 ## Purpose
 
