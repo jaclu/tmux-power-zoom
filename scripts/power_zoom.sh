@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.3 2022-02-16
+#   Version: 0.1.0 2022-02-28
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -19,7 +19,8 @@ CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 
 power_zoom() {
-    log_it "power_zoom() triggered" 
+    recursion="$1"
+    [ "$recursion" != "" ] && log_it "power_zoom($recursion) triggered" 
 
     primary_pane_id="$(tmux display -p '#D')"
     primary_pane_title="$(tmux display -p '#T')"
@@ -27,15 +28,15 @@ power_zoom() {
     placeholder_stub="=== POWER ZOOM === place-holder for pane:"
     placeholder_title="$placeholder_stub $primary_pane_id"
 
-    log_it "Checking for this place holder: [$placeholder_title]"
+    log_it "Checking for this place-holder: [$placeholder_title]"
     placeholder_pane=$(tmux list-panes -a -F "#D #T" | grep "$placeholder_title" | awk '{ print $1 }')
 
     if [ -n "$placeholder_pane" ]; then
         #
-        #  Found a place holder for current pane, move it there and delete
-        #  the place holder
+        #  Found a place-holder for current pane, move it there and delete
+        #  the place-holder
         #
-        log_it "Found a matching place holder, move this pane there and delete it"
+        log_it "Found a matching place-holder, move this pane there and delete place-holder"
         tmux join-pane -b -t "$placeholder_pane"
         tmux kill-pane -t "$placeholder_pane"
     else
@@ -46,19 +47,42 @@ power_zoom() {
             msg="Cant zoom only pane in a window"
             log_it "$msg"
             tmux display "$msg"
-            return
+            return 0
         fi
         if [ "$(tmux display -p '#T' | grep "$placeholder_stub")" != "" ]; then
-            msg="This is a Power-Zoom place holder!"
-            log_it "$msg"
-            tmux display "$msg"
-            return
+            log_it "This is a Power-Zoom place-holder!"
+            #
+            # go to the referred pane, and run power_zoom again to restore it.
+            #
+            if [ "$recursion" -ne "" ]; then
+                msg="power_zoom is entering recursion, aborting"
+                log_it "$msg"
+                tmux display "$msg"
+                return 0
+            fi
+            pane_id="$(tmux display -p '#T'| awk '{print $8}')"
+            log_it "pane_id: [$pane_id]"
+            if ! tmux select-window -t "$pane_id"; then
+                msg="Failed to find window with Zoomed pane: $pane_id"
+                log_it "$msg"
+                tmux display "$msg"
+                return 0
+            fi
+            
+            if ! tmux select-pane -t  "$pane_id"; then
+                msg="Failed to find Zoomed pane: $pane_id"
+                log_it "$msg"
+                tmux display "$msg"
+                return 0
+            fi
+            power_zoom recursion
+            return 0
         fi
         #
-        #  the place holder pane will close when it's process is terminated, 
+        #  the place-holder pane will close when it's process is terminated, 
         #  so keep a long sleep going for ever in a loop.
         #  Ctrl-C would exit script and pane would close in case the zoomed pane
-        #  is killed and the place holder is left hanging.
+        #  is killed and the place-holder is left hanging.
         #
         log_it "Zoom active pane to new window"
         tmux split-window -b "echo; echo \"  $placeholder_title\"; while true ; do sleep 30; done"
@@ -67,6 +91,7 @@ power_zoom() {
         tmux break-pane  # move it to new window
         tmux rename-window "**POWER ZOOM** $primary_pane_title ($primary_pane_id)"
     fi
+    return 0
 }
 
 power_zoom

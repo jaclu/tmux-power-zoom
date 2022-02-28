@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.3 2022-02-16
+#   Version: 0.0.4 2022-02-28
 #
 #  Common stuff
 #
@@ -28,8 +28,8 @@ get_tmux_option() {
 
 
 #
-#  If log_file is empty or undefined, no logging will occur, so normally
-#  comment it out for normal usage.
+#  If log_file is empty or undefined, no logging will occur, 
+#  so comment it out for normal usage.
 #
 #log_file="/tmp/tmux-power-zoom.log"
 
