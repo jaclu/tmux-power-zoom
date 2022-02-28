@@ -52,10 +52,6 @@ Reload TMUX environment with `$ tmux source-file ~/.tmux.conf`, and that's it.
 | `@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>` |
 | `@power_zoom_mouse`          | 0       | If set to 1, right double click toggles Power Zoom    |
 
-## TODO
-
-Figure out how to use `-t '{mouse}'` with the mouse trigger to activate mouse-overed pane before zoom happens, to ensure the intended pane is zoomed.
-
 ## Contributing
 
 Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
