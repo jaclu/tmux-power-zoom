@@ -68,7 +68,7 @@ power_zoom() {
                 tmux display "$msg"
                 return 0
             fi
-            
+
             if ! tmux select-pane -t  "$pane_id"; then
                 msg="Failed to find Zoomed pane: $pane_id"
                 log_it "$msg"
@@ -79,7 +79,7 @@ power_zoom() {
             return 0
         fi
         #
-        #  the place-holder pane will close when it's process is terminated, 
+        #  the place-holder pane will close when it's process is terminated,
         #  so keep a long sleep going for ever in a loop.
         #  Ctrl-C would exit script and pane would close in case the zoomed pane
         #  is killed and the place-holder is left hanging.
