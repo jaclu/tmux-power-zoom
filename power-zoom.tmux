@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.3 2022-02-16
+#   Version: 0.1.0 2022-03-03
 #
 
 # shellcheck disable=SC1007
@@ -43,13 +43,29 @@ log_it "without_prefix=[$without_prefix]"
 mouse_zoom=$(check_1_0_param "@power_zoom_mouse")
 log_it "mouse_zoom=[$mouse_zoom]"
 
+#
+#  Generic plugin setting I use to add Notes to plugin keys that are bound
+#  This makes this key binding show up when doing <prefix> ?
+#  If not set to "Yes", no attempt at adding notes will happen.
+#  bind-key Notes were added in tmux 3.1, so should not be used on older versions!
+#
+use_notes=$(get_tmux_option "@plugin_use_notes" "No")
+log_it "use_notes=[$use_notes]"
 
 
 if [ "$without_prefix" -eq 1 ]; then
-    tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    if [ "$use_notes" = "Yes" ]; then
+        tmux bind -N "tmux-power-zoom" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    else
+        tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    fi
     log_it "Menus bound to: $trigger_key"
 else
-    tmux bind    "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    if [ "$use_notes" = "Yes" ]; then
+        tmux bind -N "tmux-power-zoom" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    else
+        tmux bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+    fi
     log_it "Menus bound to: <prefix> $trigger_key"
 fi
 
