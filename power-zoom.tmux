@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.0 2022-03-03
+#   Version: 0.1.1 2022-03-19
 #
 
 # shellcheck disable=SC1007
@@ -18,7 +18,7 @@ SCRIPTS_DIR="$CURRENT_DIR/scripts"
 
 
 #
-#  By using Z as default we don't overwrite the default zoom binding
+#  By using Z as default we don't overwrite the default zoom binding (z)
 #  unless the caller actually want this to happen.
 #
 default_key="Z"
@@ -36,12 +36,22 @@ log_it "$(date)"
 trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 log_it "trigger_key=[$trigger_key]"
 
-# shellcheck disable=SC2154
-without_prefix=$(check_1_0_param "@power_zoom_without_prefix")
+
+if bool_param "$(get_tmux_option "@power_zoom_without_prefix" "No")"; then
+    without_prefix=1
+else
+    without_prefix=0
+fi
 log_it "without_prefix=[$without_prefix]"
 
-mouse_zoom=$(check_1_0_param "@power_zoom_mouse")
+
+if bool_param "$(get_tmux_option "@power_zoom_mouse" "No")"; then
+    mouse_zoom=1
+else
+    mouse_zoom=0
+fi
 log_it "mouse_zoom=[$mouse_zoom]"
+
 
 #
 #  Generic plugin setting I use to add Notes to plugin keys that are bound
@@ -49,25 +59,30 @@ log_it "mouse_zoom=[$mouse_zoom]"
 #  If not set to "Yes", no attempt at adding notes will happen.
 #  bind-key Notes were added in tmux 3.1, so should not be used on older versions!
 #
-use_notes=$(get_tmux_option "@plugin_use_notes" "No")
+if bool_param "$(get_tmux_option "@plugin_use_notes" "No")"; then
+    use_notes=1
+else
+    use_notes=0
+fi
 log_it "use_notes=[$use_notes]"
 
 
 if [ "$without_prefix" -eq 1 ]; then
-    if [ "$use_notes" = "Yes" ]; then
+    if [ "$use_notes" -eq 1 ]; then
         tmux bind -N "tmux-power-zoom" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
         tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi
     log_it "Menus bound to: $trigger_key"
 else
-    if [ "$use_notes" = "Yes" ]; then
+    if [ "$use_notes" -eq 1 ]; then
         tmux bind -N "tmux-power-zoom" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
         tmux bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi
     log_it "Menus bound to: <prefix> $trigger_key"
 fi
+
 
 if [ "$mouse_zoom" -eq 1 ]; then
     #

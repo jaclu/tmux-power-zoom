@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.0.4 2022-02-28
+#   Version: 0.1.0 2022-03-19
 #
 #  Common stuff
 #
@@ -13,6 +13,21 @@
 #  a function does not overwrite a value for a caller, it's good practice
 #  to always use function related prefixes on all variable names.
 #
+
+
+#
+#  If log_file is empty or undefined, no logging will occur,
+#  so comment it out for normal usage.
+#
+#log_file="/tmp/tmux-power-zoom.log"
+
+log_it() {
+    if [ -z "$log_file" ]; then
+        return
+    fi
+    printf "%s\n" "$@" >> "$log_file"
+}
+
 
 get_tmux_option() {
     gto_option=$1
@@ -26,47 +41,34 @@ get_tmux_option() {
 }
 
 
-
 #
-#  If log_file is empty or undefined, no logging will occur, 
-#  so comment it out for normal usage.
+#  Argh in shell bool true is 0, but to make the bool paramas
+#  more relatable for users 1 is yes and 0 is no, so we need to switch
+#  them here in order for assignment to follow bool logic in caller
 #
-#log_file="/tmp/tmux-power-zoom.log"
+bool_param() {
+    case "$1" in
 
-log_it() {
-    if [ -z "$log_file" ]; then
-        return
-    fi
-    printf "%s\n" "$@" >> "$log_file"
-}
+        "0") return 1 ;;
 
+        "1") return 0 ;;
 
-#
-#  If value is not defined, set it to 0
-#  If Value is set to be 1/0 use that value
-#  Accept a few alternative common positives as 1
-#  Display error for other values
-#
-check_1_0_param() {
-    c10p_option="$1"
-    c10p_value=$(get_tmux_option "$c10p_option" "0")
-
-    case "$c10p_value" in
-        
-        "0" | "1" )  # expected values
-            echo "$c10p_value"
-	    ;;
-        
         "yes" | "Yes" | "YES" | "true" | "True" | "TRUE" )
-	    #  Be a nice guy and accept some common positives
-            log_it "Converted incorrect positive to 1"
-            # shellcheck disable=SC2034
-            echo 1
+            #  Be a nice guy and accept some common positives
+            log_it "Converted incorrect positive [$1] to 1"
+            return 0
             ;;
-        
+
+        "no" | "No" | "NO" | "false" | "False" | "FALSE" )
+            #  Be a nice guy and accept some common negatives
+            log_it "Converted incorrect negative [$1] to 0"
+            return 1
+            ;;
+
         *)
-            log_it "Invalid $c10p_option value - [$c10p_value]"
-            tmux display "ERROR: \"$c10p_option\" should be 0 or 1, was: $c10p_value"
-            exit 0  # Exit 0 wont throw a tmux error            
+            log_it "Invalid parameter bool_param($1)"
+            tmux display "ERROR: bool_param($1) - should be 0 or 1"
+
     esac
+    return 1
 }

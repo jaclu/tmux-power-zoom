@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.0 2022-02-28
+#   Version: 0.1.1 2022-03-19
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -20,7 +20,7 @@ CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 power_zoom() {
     recursion="$1"
-    [ "$recursion" != "" ] && log_it "power_zoom($recursion) triggered" 
+    [ "$recursion" != "" ] && log_it "power_zoom($recursion) triggered"
 
     primary_pane_id="$(tmux display -p '#D')"
     primary_pane_title="$(tmux display -p '#T')"
@@ -55,7 +55,7 @@ power_zoom() {
             # go to the referred pane, and run power_zoom again to restore it.
             #
             if [ "$recursion" -ne "" ]; then
-                msg="power_zoom is entering recursion, aborting"
+                msg="power_zoom is entering repeated recursion, aborting"
                 log_it "$msg"
                 tmux display "$msg"
                 return 0
