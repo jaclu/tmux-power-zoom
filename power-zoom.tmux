@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.1 2022-03-19
+#   Version: 0.1.2 2022-04-04
 #
 
 # shellcheck disable=SC1007
@@ -25,12 +25,10 @@ default_key="Z"
 
 
 #
-#  Make it easy to see when a log run occurred, also makes it easier
-#  to separate runs of this script
+#  By printing a NL and date, its easier to keep separate runs apart
 #
-log_it ""  # Trigger LF to separate runs of this script
+log_it ""
 log_it "$(date)"
-
 
 
 trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
@@ -69,14 +67,14 @@ log_it "use_notes=[$use_notes]"
 
 if [ "$without_prefix" -eq 1 ]; then
     if [ "$use_notes" -eq 1 ]; then
-        tmux bind -N "tmux-power-zoom" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        tmux bind -N "$plugin_name" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
         tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi
     log_it "Menus bound to: $trigger_key"
 else
     if [ "$use_notes" -eq 1 ]; then
-        tmux bind -N "tmux-power-zoom" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        tmux bind -N "$plugin_name" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
         tmux bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi

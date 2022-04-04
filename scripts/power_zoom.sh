@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 #   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
 #   License: MIT
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.1 2022-03-19
+#   Version: 0.1.2 2022-04-04
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -44,35 +44,27 @@ power_zoom() {
         #  Zoom this to new window
         #
         if [ "$(tmux list-panes | wc -l)" -eq 1 ]; then
-            msg="Cant zoom only pane in a window"
-            log_it "$msg"
-            tmux display "$msg"
+             error_msg "Can't zoom only pane in a window"
             return 0
         fi
         if [ "$(tmux display -p '#T' | grep "$placeholder_stub")" != "" ]; then
-            log_it "This is a Power-Zoom place-holder!"
+            log_it "This is a $plugin_name place-holder!"
             #
             # go to the referred pane, and run power_zoom again to restore it.
             #
             if [ "$recursion" -ne "" ]; then
-                msg="power_zoom is entering repeated recursion, aborting"
-                log_it "$msg"
-                tmux display "$msg"
+                error_msg "power_zoom is entering repeated recursion, aborting"
                 return 0
             fi
             pane_id="$(tmux display -p '#T'| awk '{print $8}')"
             log_it "pane_id: [$pane_id]"
             if ! tmux select-window -t "$pane_id"; then
-                msg="Failed to find window with Zoomed pane: $pane_id"
-                log_it "$msg"
-                tmux display "$msg"
+                error_msg "Failed to find window with Zoomed pane: $pane_id"
                 return 0
             fi
 
             if ! tmux select-pane -t  "$pane_id"; then
-                msg="Failed to find Zoomed pane: $pane_id"
-                log_it "$msg"
-                tmux display "$msg"
+                error_msg "Failed to find Zoomed pane: $pane_id"
                 return 0
             fi
             power_zoom recursion
