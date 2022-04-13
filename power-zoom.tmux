@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.2 2022-04-04
+#   Version: 0.1.3 2022-04-13
 #
 
 # shellcheck disable=SC1007
@@ -67,6 +67,7 @@ log_it "use_notes=[$use_notes]"
 
 if [ "$without_prefix" -eq 1 ]; then
     if [ "$use_notes" -eq 1 ]; then
+        #  shellcheck disable=SC2154
         tmux bind -N "$plugin_name" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
         tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh

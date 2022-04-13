@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.2 2022-04-04
+#   Version: 0.1.3 2022-04-13
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -48,6 +48,7 @@ power_zoom() {
             return 0
         fi
         if [ "$(tmux display -p '#T' | grep "$placeholder_stub")" != "" ]; then
+            #  shellcheck disable=SC2154
             log_it "This is a $plugin_name place-holder!"
             #
             # go to the referred pane, and run power_zoom again to restore it.
