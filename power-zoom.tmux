@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.3 2022-04-13
+#   Version: 0.2.0 2022-04-15
 #
 
 # shellcheck disable=SC1007
@@ -57,7 +57,7 @@ log_it "mouse_zoom=[$mouse_zoom]"
 #  If not set to "Yes", no attempt at adding notes will happen.
 #  bind-key Notes were added in tmux 3.1, so should not be used on older versions!
 #
-if bool_param "$(get_tmux_option "@plugin_use_notes" "No")"; then
+if bool_param "$(get_tmux_option "@use_bind_key_notes_in_plugins" "No")"; then
     use_notes=1
 else
     use_notes=0
