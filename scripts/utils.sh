@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.1 2022-04-04
+#   Version: 0.2.0 2022-04-15
 #
 #  Common stuff
 #
@@ -67,13 +67,13 @@ bool_param() {
 
         "yes" | "Yes" | "YES" | "true" | "True" | "TRUE" )
             #  Be a nice guy and accept some common positives
-            log_it "Converted incorrect positive [$1] to 1"
+            log_it "Converted incorrect positive [$1] to 0"
             return 0
             ;;
 
         "no" | "No" | "NO" | "false" | "False" | "FALSE" )
             #  Be a nice guy and accept some common negatives
-            log_it "Converted incorrect negative [$1] to 0"
+            log_it "Converted incorrect negative [$1] to 1"
             return 1
             ;;
 
@@ -83,9 +83,8 @@ bool_param() {
             ;;
 
     esac
-    return 1
+    return 1 # default to False
 }
-
 
 get_tmux_option() {
     gto_option=$1
