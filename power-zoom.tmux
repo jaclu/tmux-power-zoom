@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.2.0 2022-04-15
+#   Version: 0.2.1 2022-09-15
 #
 
 # shellcheck disable=SC1007
@@ -68,16 +68,16 @@ log_it "use_notes=[$use_notes]"
 if [ "$without_prefix" -eq 1 ]; then
     if [ "$use_notes" -eq 1 ]; then
         #  shellcheck disable=SC2154
-        tmux bind -N "$plugin_name" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        $TMUX_BIN bind -N "$plugin_name" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
-        tmux bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        $TMUX_BIN bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi
     log_it "Menus bound to: $trigger_key"
 else
     if [ "$use_notes" -eq 1 ]; then
-        tmux bind -N "$plugin_name" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        $TMUX_BIN bind -N "$plugin_name" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     else
-        tmux bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+        $TMUX_BIN bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     fi
     log_it "Menus bound to: <prefix> $trigger_key"
 fi
@@ -88,5 +88,5 @@ if [ "$mouse_zoom" -eq 1 ]; then
     #  First select the mouse-over pane, then trigger zoom, otherwise the
     #  focused pane would get zoomed, and not the clicked one.
     #
-    tmux bind -n DoubleClick3Pane "select-pane -t= ; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
+    $TMUX_BIN bind -n DoubleClick3Pane "select-pane -t= ; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
 fi

@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.2.0 2022-04-15
+#   Version: 0.2.1 2022-09-15
 #
 #  Common stuff
 #
@@ -19,6 +19,17 @@
 #  locations, easily getting out of sync.
 #
 plugin_name="tmux-power-zoom"
+
+
+#
+#  I use an env var TMUX_BIN to point at the current tmux, defined in my
+#  tmux.conf, in order to pick the version matching the server running.
+#  This is needed when checking backwards compatability with various versions.
+#  If not found, it is set to whatever is in path, so should have no negative
+#  impact. In all calls to tmux I use $TMUX_BIN instead in the rest of this
+#  plugin.
+#
+[ -z "$TMUX_BIN" ] && TMUX_BIN="tmux"
 
 
 #
@@ -48,7 +59,7 @@ error_msg() {
     exit_code="${2:-0}"
 
     log_it "$msg"
-    tmux display-message "$plugin_name $msg"
+    $TMUX_BIN display-message "$plugin_name $msg"
     [ "$exit_code" -ne 0 ] && exit "$exit_code"
 }
 
@@ -89,7 +100,7 @@ bool_param() {
 get_tmux_option() {
     gto_option=$1
     gto_default_value=$2
-    gto_value=$(tmux show-option -gqv "$gto_option")
+    gto_value=$($TMUX_BIN show-option -gqv "$gto_option")
     if [ -z "$gto_value" ]; then
         echo "$gto_default_value"
     else
