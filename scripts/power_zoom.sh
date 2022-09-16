@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.4 2022-09-15
+#   Version: 0.1.5 2022-09-16
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -78,7 +78,9 @@ power_zoom() {
         #  is killed and the place-holder is left hanging.
         #
         log_it "Zoom active pane to new window"
-        $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\"; while true ; do sleep 30; done"
+	# shellcheck disable=SC2154
+	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
+        $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\n  Press <Prefix> $trigger_key in this pane to restore it back here...\"; while true ; do sleep 30; done"
         $TMUX_BIN select-pane -T "$placeholder_title"
         $TMUX_BIN select-pane -t "$primary_pane_id"
         $TMUX_BIN break-pane  # move it to new window
