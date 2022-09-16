@@ -80,7 +80,7 @@ power_zoom() {
         log_it "Zoom active pane to new window"
 	# shellcheck disable=SC2154
 	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
-        $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\n  Press <Prefix> $trigger_key in this pane to restore it back here...\"; while true ; do sleep 30; done"
+        $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\n  Press [<Prefix> $trigger_key] in this pane to restore it back here...\"; while true ; do sleep 30; done"
         $TMUX_BIN select-pane -T "$placeholder_title"
         $TMUX_BIN select-pane -t "$primary_pane_id"
         $TMUX_BIN break-pane  # move it to new window
