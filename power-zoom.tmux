@@ -5,7 +5,9 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.2.1 2022-09-15
+#   Version: 0.2.2 2022-09-18
+#
+#   Dependency: 2.6 - select-pane -T introduced with this version
 #
 
 # shellcheck disable=SC1007

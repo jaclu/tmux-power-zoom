@@ -32,7 +32,7 @@ If `@power_zoom_mouse` is enabled, right double click also toggles Power Zoom.
 
 ### Dependencies
 
-`tmux 2.6` or higher.
+`tmux 2.6` or higher.  Needs select-pane -T option.  Could be made to work on earlier version with a bit of rewrite, if anybody has such a need, drop me a notice.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
