@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.2.2 2022-09-18
+#   Version: 0.3.0 2022-09-27
 #
 #   Dependency: 2.6 - select-pane -T introduced with this version
 #
@@ -44,14 +44,8 @@ else
 fi
 log_it "without_prefix=[$without_prefix]"
 
-
-if bool_param "$(get_tmux_option "@power_zoom_mouse" "No")"; then
-    mouse_zoom=1
-else
-    mouse_zoom=0
-fi
-log_it "mouse_zoom=[$mouse_zoom]"
-
+mouse_action="$(get_tmux_option "@power_zoom_mouse_action")"
+log_it "mouse_action=[$mouse_action]"
 
 #
 #  Generic plugin setting I use to add Notes to plugin keys that are bound
@@ -60,35 +54,50 @@ log_it "mouse_zoom=[$mouse_zoom]"
 #  bind-key Notes were added in tmux 3.1, so should not be used on older versions!
 #
 if bool_param "$(get_tmux_option "@use_bind_key_notes_in_plugins" "No")"; then
-    use_notes=1
+    #  shellcheck disable=SC2154
+    note="-Nplugin: $plugin_name"
 else
-    use_notes=0
+    note=""
 fi
-log_it "use_notes=[$use_notes]"
+log_it "note=[$note]"
 
 
 if [ "$without_prefix" -eq 1 ]; then
-    if [ "$use_notes" -eq 1 ]; then
-        #  shellcheck disable=SC2154
-        $TMUX_BIN bind -N "$plugin_name" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
-    else
-        $TMUX_BIN bind -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
-    fi
+    #  shellcheck disable=SC2154
+    $TMUX_BIN bind "$note" -n "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     log_it "Menus bound to: $trigger_key"
 else
-    if [ "$use_notes" -eq 1 ]; then
-        $TMUX_BIN bind -N "$plugin_name" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
-    else
-        $TMUX_BIN bind "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
-    fi
+    $TMUX_BIN bind "$note" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
     log_it "Menus bound to: <prefix> $trigger_key"
 fi
 
+
+mouse_cmd="select-pane -t= ; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
+
+
+if [ -n "$mouse_action" ]; then
+    #
+    #  First select the mouse-over pane, then trigger zoom, otherwise the
+    #  focused pane would get zoomed, and not the clicked one.
+    #
+    $TMUX_BIN bind "$note" -n "$mouse_action" "$mouse_cmd"
+fi
+
+
+#
+#  Obsolete, will soon be removed!
+#
+if bool_param "$(get_tmux_option "@power_zoom_mouse" "No")"; then
+    mouse_zoom=1
+else
+    mouse_zoom=0
+fi
+log_it "mouse_zoom=[$mouse_zoom]"
 
 if [ "$mouse_zoom" -eq 1 ]; then
     #
     #  First select the mouse-over pane, then trigger zoom, otherwise the
     #  focused pane would get zoomed, and not the clicked one.
     #
-    $TMUX_BIN bind -n DoubleClick3Pane "select-pane -t= ; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
+    $TMUX_BIN bind "$note" -n DoubleClick3Pane "$mouse_cmd"
 fi

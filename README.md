@@ -8,10 +8,16 @@ risking getting a crowded mess of panes.
 You can also restore by triggering the power-zoom action on the place-holder
 pane.
 
+## Recent changes
+
+- Changed mouse handling, was just on/off, and trigger-action
+couldn't be selected. Now allows selection of mouse-action, this also makes
+it possible to use a modifier to the mouse action.
+
 ## Purpose
 
 Often when zooming a pane, working in it for a while and then figure out
-a new pane is needed to check something, the zoomed state is forgotten.
+a new pane is needed to look something up, the zoomed state is forgotten.
 When opening a new pane this way, the new pane becomes squeezed in next
 to the original pane, often far to small to be practically usable.
 
@@ -26,13 +32,16 @@ the purpose of that window.
 ## Usage
 
 Hit `<prefix>` + `@power_zoom_trigger` to toggle Power Zoom.
-If `@power_zoom_mouse` is enabled, right double click also toggles Power Zoom.
+If `@power_zoom_mouse_action` is defined, that mouse action also toggles
+ Power Zoom.
 
 ## Install
 
 ### Dependencies
 
-`tmux 2.6` or higher.  Needs select-pane -T option.  Could be made to work on earlier version with a bit of rewrite, if anybody has such a need, drop me a notice.
+`tmux 2.6` or higher. Needs select-pane -T option. Could be made to work on
+earlier version with a bit of rewrite, if anybody has such a need,
+create an Issue.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
@@ -66,7 +75,8 @@ Option | Default | Description
 -|-|-
 `@power_zoom_trigger` | Z | Key that triggers Power Zoom to toggle
 `@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>`
-`@power_zoom_mouse`          | 0       | If set to 1, right double click toggles Power Zoom
+`@power_zoom_mouse_action`          |       | Defines a mouse action trigger<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>C-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane
+`@power_zoom_mouse` | 0 | >> OBSOLETE - Will be removed soon! <<<br/>If set to 1, right double click toggles Power Zoom
 
 ## Contributing
 
