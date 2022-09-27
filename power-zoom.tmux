@@ -55,7 +55,7 @@ log_it "mouse_action=[$mouse_action]"
 #
 if bool_param "$(get_tmux_option "@use_bind_key_notes_in_plugins" "No")"; then
     #  shellcheck disable=SC2154
-    note="-Nplugin: $plugin_name"
+    note="-Nplugin:$plugin_name"
 else
     note=""
 fi
