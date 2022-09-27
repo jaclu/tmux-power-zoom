@@ -5,7 +5,7 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.5 2022-09-16
+#   Version: 0.1.6 2022-09-27
 #
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
@@ -20,8 +20,9 @@ CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 power_zoom() {
     recursion="$1"
-    [ "$recursion" != "" ] && log_it "power_zoom($recursion) triggered"
+    [[ "$recursion" != "" ]] && log_it "power_zoom($recursion) triggered"
 
+    # shellcheck disable=SC2154
     primary_pane_id="$($TMUX_BIN display -p '#D')"
     primary_pane_title="$($TMUX_BIN display -p '#T')"
 
@@ -31,7 +32,7 @@ power_zoom() {
     log_it "Checking for this place-holder: [$placeholder_title]"
     placeholder_pane=$($TMUX_BIN list-panes -a -F "#D #T" | grep "$placeholder_title" | awk '{ print $1 }')
 
-    if [ -n "$placeholder_pane" ]; then
+    if [[ -n "$placeholder_pane" ]]; then
         #
         #  Found a place-holder for current pane, move it there and delete
         #  the place-holder
@@ -43,17 +44,17 @@ power_zoom() {
         #
         #  Zoom this to new window
         #
-        if [ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]; then
+        if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
              error_msg "Can't zoom only pane in a window"
             return 0
         fi
-        if [ "$($TMUX_BIN display -p '#T' | grep "$placeholder_stub")" != "" ]; then
+        if [[ "$($TMUX_BIN display -p '#T' | grep "$placeholder_stub")" != "" ]]; then
             #  shellcheck disable=SC2154
             log_it "This is a $plugin_name place-holder!"
             #
             # go to the referred pane, and run power_zoom again to restore it.
             #
-            if [ "$recursion" -ne "" ]; then
+            if [[ "$recursion" -ne "" ]]; then
                 error_msg "power_zoom is entering repeated recursion, aborting"
                 return 0
             fi
