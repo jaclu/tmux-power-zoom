@@ -10,6 +10,8 @@ pane.
 
 ## Recent changes
 
+- Fixed some issues that prevented this to run on older versions of tmux.
+Now retested to be usable all the way back to tmux 2.6
 - Changed mouse handling, was just on/off, and trigger-action
 couldn't be selected. Now allows selection of mouse-action, this also makes
 it possible to use a modifier to the mouse action.
@@ -75,7 +77,7 @@ Option | Default | Description
 -|-|-
 `@power_zoom_trigger` | Z | Key that triggers Power Zoom to toggle
 `@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>`
-`@power_zoom_mouse_action`          |       | Defines a mouse action trigger<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>C-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane
+`@power_zoom_mouse_action`          |       | Defines a mouse action trigger, supports modifiers<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>S-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane
 `@power_zoom_mouse` | 0 | >> OBSOLETE - Will be removed soon! <<<br/>If set to 1, right double click toggles Power Zoom
 
 ## Contributing

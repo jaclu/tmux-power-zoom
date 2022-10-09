@@ -5,8 +5,6 @@
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
 #
-#   Version: 0.1.6 2022-09-27
-#
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
 #
