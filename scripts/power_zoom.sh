@@ -44,7 +44,6 @@ check_pz_status() {
     local pow_zoomed_panes
     local placeholder
     local zoomed
-    local sune
     
     case $1 in
 
