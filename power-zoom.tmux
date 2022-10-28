@@ -20,13 +20,6 @@ SCRIPTS_DIR="$CURRENT_DIR/scripts"
 
 
 #
-#  By using Z as default we don't overwrite the default zoom binding (z)
-#  unless the caller actually want this to happen.
-#
-default_key="Z"
-
-
-#
 #  By printing a NL and date, its easier to keep separate runs apart
 #
 log_it ""
@@ -79,6 +72,11 @@ if bool_param "$(get_tmux_option "@power_zoom_without_prefix" "No")"; then
     options+=" -n"
     log_it "Not using prefix"
 fi
+
+#
+#  Debug - clear list of zoomed panes
+#
+$TMUX_BIN set-option -U @power_zoom_state
 
 # shellcheck disable=SC2086  #options cant be quoted
 $TMUX_BIN bind $options "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh

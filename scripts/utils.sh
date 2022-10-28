@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 #   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
 #   License: MIT
@@ -20,28 +20,33 @@ plugin_name="tmux-power-zoom"
 
 
 #
+#  By using Z as default we don't overwrite the default zoom binding (z)
+#  unless the caller actually want this to happen.
+#
+default_key="Z"
+
+#
 #  I use an env var TMUX_BIN to point at the current tmux, defined in my
 #  tmux.conf, in order to pick the version matching the server running.
-#  This is needed when checking backwards compatability with various versions.
 #  If not found, it is set to whatever is in path, so should have no negative
 #  impact. In all calls to tmux I use $TMUX_BIN instead in the rest of this
 #  plugin.
 #
-[ -z "$TMUX_BIN" ] && TMUX_BIN="tmux"
+[[ -z "$TMUX_BIN" ]] && TMUX_BIN="tmux"
 
 
 #
 #  If log_file is empty or undefined, no logging will occur,
 #  so comment it out for normal usage.
 #
-# log_file="/tmp/$plugin_name.log"  # Trigger LF to separate runs of this script
+ log_file="/tmp/$plugin_name.log"  # Trigger LF to separate runs of this script
 
 
 #
 #  If $log_file is empty or undefined, no logging will occur.
 #
 log_it() {
-    if [ -z "$log_file" ]; then
+    if [[ -z "$log_file" ]]; then
         return
     fi
     printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$@" >> "$log_file"
@@ -58,7 +63,7 @@ error_msg() {
 
     log_it "$msg"
     $TMUX_BIN display-message "$plugin_name $msg"
-    [ "$exit_code" -ne 0 ] && exit "$exit_code"
+    [[ "$exit_code" -ne 0 ]] && exit "$exit_code"
 }
 
 
@@ -97,7 +102,7 @@ get_tmux_option() {
     gto_option=$1
     gto_default_value=$2
     gto_value=$($TMUX_BIN show-option -gqv "$gto_option")
-    if [ -z "$gto_value" ]; then
+    if [[ -z "$gto_value" ]]; then
         echo "$gto_default_value"
     else
         echo "$gto_value"
