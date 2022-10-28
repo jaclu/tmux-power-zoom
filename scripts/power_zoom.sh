@@ -114,7 +114,7 @@ power_zoom() {
         #
         #  Keep code simple, only use one unzoom procedure
         #
-        $TMUX_BIN select-window -t $zoomed
+        $TMUX_BIN select-window -t "$zoomed"
         power_zoom recursion
     else
         #
@@ -136,7 +136,7 @@ power_zoom() {
         $TMUX_BIN select-pane -T "$placeholder_title"
         placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$current_pane_id"
-        $TMUX_BIN select-pane -t $current_pane_id
+        $TMUX_BIN select-pane -t "$current_pane_id"
         $TMUX_BIN break-pane  # move it to new window
         $TMUX_BIN rename-window "**POWER ZOOM** ($primary_pane_id)"
     fi
