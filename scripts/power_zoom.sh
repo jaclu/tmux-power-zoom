@@ -39,7 +39,7 @@ read_pz_status() {
 check_pz_status() {
     case $1 in
 
-        $IS_ZOOMED | $GET_PLACEHOLDER | $GET_ZOOMED ) ;;
+        "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED" ) ;;
 
         *)
             error_msg "ERROR: check_pz_status - invalid param: [$1]"
