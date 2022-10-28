@@ -23,16 +23,16 @@ GET_ZOOMED="get_zoomed"
 
 set_pz_status() {
     local value="$1"
-    log_it "new @power_zoom_states [$value]"
+    log_it ">> new @power_zoom_state [$value]"
     if [[ -n $value ]]; then
-        $TMUX_BIN set-option @power_zoom_states "$value"
+        $TMUX_BIN set-option @power_zoom_state "$value"
     else
-        $TMUX_BIN set-option -U @power_zoom_states
+        $TMUX_BIN set-option -U @power_zoom_state
     fi
 }
 
 read_pz_status() {
-    statuses="$($TMUX_BIN show-option -qv @power_zoom_states)"
+    statuses="$($TMUX_BIN show-option -qv @power_zoom_state)"
     echo "$statuses"
 }
 
@@ -93,6 +93,7 @@ check_pz_status() {
 
 power_zoom() {
     if check_pz_status "$IS_ZOOMED" ; then
+	log_it "was zoomed"
         #
         #  Is a zoomed pane, un-zoom it
         #
@@ -107,6 +108,7 @@ power_zoom() {
     fi
     zoomed="$(check_pz_status "$GET_ZOOMED")"
     if [[ -n "$zoomed" ]]; then
+	log_it "was placeholder"
         if [[ -n "$1" ]]; then
             error_msg "Recursion detected when unzooming"
             exit 1
@@ -120,6 +122,7 @@ power_zoom() {
         #
         #  Zoom it!
         #
+	log_it "will zoom"
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
              error_msg "Can't zoom only pane in a window"             
         fi
@@ -132,9 +135,15 @@ power_zoom() {
         #
 	# shellcheck disable=SC2154
 	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
-        $TMUX_BIN split-window -b "echo; echo \"  placeholder for zoomed pane $this_id\n  Press [<Prefix> $trigger_key] in this pane to restore it back here...\"; while true ; do sleep 30; done"
+	log_it ">> trigger: $trigger_key"
+
+        $TMUX_BIN split-window -b "echo; \
+		  echo \"  placeholder for zoomed pane ${this_id}\";  \
+		  echo ; echo \"  You can press <Prefix> $trigger_key\";  \
+		  echo \"  in this pane to restore it back here...\";  \
+		  bash -c \"while true ; do sleep 6; done\""
         $TMUX_BIN select-pane -T "$placeholder_title"
-        placholder_pane_id="$($TMUX_BIN display -p '#D')"
+	placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
         $TMUX_BIN select-pane -t "$this_id"
         $TMUX_BIN break-pane  # move it to new window
