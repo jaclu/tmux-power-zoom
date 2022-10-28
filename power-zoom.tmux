@@ -74,7 +74,11 @@ if bool_param "$(get_tmux_option "@power_zoom_without_prefix" "No")"; then
 fi
 
 #
-#  Debug - clear list of zoomed panes
+#  clear list of zoomed panes, should make it smarter so it leaves currently
+#  present items, this will leave them hanging on a conf source, but that
+#  is minor compared to the risk of having crash left-overs causing future
+#  havoc, the zoomed pane is left intact and dead placeholders can easily be
+#  killed.
 #
 $TMUX_BIN set-option -U @power_zoom_state
 
