@@ -23,16 +23,16 @@ GET_ZOOMED="get_zoomed"
 
 set_pz_status() {
     local value="$1"
-    log_it ">> new @power_zoom_state [$value]"
+    log_it "new @power_zoom_states [$value]"
     if [[ -n $value ]]; then
-        $TMUX_BIN set-option @power_zoom_state "$value"
+        $TMUX_BIN set-option @power_zoom_states "$value"
     else
-        $TMUX_BIN set-option -U @power_zoom_state
+        $TMUX_BIN set-option -U @power_zoom_states
     fi
 }
 
 read_pz_status() {
-    statuses="$($TMUX_BIN show-option -qv @power_zoom_state)"
+    statuses="$($TMUX_BIN show-option -qv @power_zoom_states)"
     echo "$statuses"
 }
 
