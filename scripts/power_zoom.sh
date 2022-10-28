@@ -37,6 +37,12 @@ read_pz_status() {
 }
 
 check_pz_status() {
+    local this_id
+    local updated_values
+    local do_update
+    local result
+    local pow_zoomed_panes
+    local placeholder
     case $1 in
 
         "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED" ) ;;
@@ -46,37 +52,28 @@ check_pz_status() {
             ;;
     esac
 
-    current_pane_id="$($TMUX_BIN display -p '#D')"
-    log_it "check_pz_status($1) on $current_pane_id"
+    this_id="$($TMUX_BIN display -p '#D')"
     updated_values=""
     do_update=false
     result=""
     pow_zoomed_panes=( $(read_pz_status) )
-    #log_it "iterate over: [$pow_zoomed_panes]"
     for pzp in "${pow_zoomed_panes[@]}" ; do
         placeholder="$(echo "$pzp" | cut -d= -f 1)"
         zoomed="$(echo "$pzp" | cut -d= -f 2)"
-        #log_it ">> loop pzp[$pzp] - placeholder[$placeholder] zoomed[$zoomed]"
-        if [[ $zoomed = "$current_pane_id" ]];  then
+        if [[ $zoomed = "$this_id" ]];  then
             if [[ $1 = "$IS_ZOOMED" ]]; then
                 # Since this check won't update the list of zoomed panes
                 # its ok to return early
-                log_it ">> this is zoomed"
                 return  # implicit true
             elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
                 result=$placeholder
                 do_update=true
-
-                log_it "get placeholder, found it"
                 continue  # dont save current pair in the update
             fi
-        elif [[ $placeholder = "$current_pane_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
-            log_it "this is a placeholder for $zoomed"
+        elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             result=$zoomed
             break
         fi
-        # when unzooming
-        #if [[ $placeholder = $current_pane_id ]]; then
         updated_values="$updated_values $placeholder=$zoomed"
     done
     if $do_update; then
@@ -90,6 +87,7 @@ check_pz_status() {
         false
     fi
 }
+
 
 power_zoom() {
     if check_pz_status "$IS_ZOOMED" ; then
@@ -123,7 +121,7 @@ power_zoom() {
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
              error_msg "Can't zoom only pane in a window"             
         fi
-        current_pane_id="$($TMUX_BIN display -p '#D')"
+        this_id="$($TMUX_BIN display -p '#D')"
         #
         #  the place-holder pane will close when it's process is terminated,
         #  so keep a long sleep going for ever in a loop.
@@ -135,14 +133,11 @@ power_zoom() {
         $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\n  Press [<Prefix> $trigger_key] in this pane to restore it back here...\"; while true ; do sleep 30; done"
         $TMUX_BIN select-pane -T "$placeholder_title"
         placholder_pane_id="$($TMUX_BIN display -p '#D')"
-        set_pz_status "$(read_pz_status) $placholder_pane_id=$current_pane_id"
-        $TMUX_BIN select-pane -t "$current_pane_id"
+        set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
+        $TMUX_BIN select-pane -t "$this_id"
         $TMUX_BIN break-pane  # move it to new window
         $TMUX_BIN rename-window "**POWER ZOOM** ($primary_pane_id)"
     fi
 }
-
-
-       
 
 power_zoom

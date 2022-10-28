@@ -22,7 +22,6 @@ plugin_name="tmux-power-zoom"
 #
 #  I use an env var TMUX_BIN to point at the current tmux, defined in my
 #  tmux.conf, in order to pick the version matching the server running.
-#  This is needed when checking backwards compatability with various versions.
 #  If not found, it is set to whatever is in path, so should have no negative
 #  impact. In all calls to tmux I use $TMUX_BIN instead in the rest of this
 #  plugin.
