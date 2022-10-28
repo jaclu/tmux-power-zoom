@@ -54,11 +54,11 @@ check_pz_status() {
     pow_zoomed_panes=( $(read_pz_status) )
     #log_it "iterate over: [$pow_zoomed_panes]"
     for pzp in "${pow_zoomed_panes[@]}" ; do
-        placeholder="$(echo $pzp | cut -d= -f 1)"
-        zoomed="$(echo $pzp | cut -d= -f 2)"
+        placeholder="$(echo "$pzp" | cut -d= -f 1)"
+        zoomed="$(echo "$pzp" | cut -d= -f 2)"
         #log_it ">> loop pzp[$pzp] - placeholder[$placeholder] zoomed[$zoomed]"
-        if [[ $zoomed = $current_pane_id ]];  then
-            if [[ $1 = $IS_ZOOMED ]]; then
+        if [[ $zoomed = "$current_pane_id" ]];  then
+            if [[ $1 = "$IS_ZOOMED" ]]; then
                 # Since this check won't update the list of zoomed panes
                 # its ok to return early
                 log_it ">> this is zoomed"
