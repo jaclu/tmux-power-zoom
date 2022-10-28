@@ -99,15 +99,16 @@ bool_param() {
 }
 
 get_tmux_option() {
-    gto_option=$1
-    gto_default_value=$2
-    gto_value=$($TMUX_BIN show-option -gqv "$gto_option")
-    if [[ -z "$gto_value" ]]; then
-        echo "$gto_default_value"
+    local option
+    lcal default_value
+    local value
+
+    option=$1
+    default_value=$2
+    value=$($TMUX_BIN show-option -gqv "$option")
+    if [[ -z "$value" ]]; then
+        echo "$default_value"
     else
-        echo "$gto_value"
+        echo "$value"
     fi
-    unset gto_option
-    unset gto_default_value
-    unset gto_value
 }
