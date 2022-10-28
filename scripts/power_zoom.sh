@@ -137,11 +137,15 @@ power_zoom() {
 	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 	log_it ">> trigger: $trigger_key"
 
+        #
+        #  What an unexpected pain, doing a while loop in a sub shell fails if
+        #  the shel is fish. Luckily in this case I could wrap it in /bin/sh -c "foo"
+        #
         $TMUX_BIN split-window -b "echo; \
 		  echo \"  placeholder for zoomed pane ${this_id}\";  \
 		  echo ; echo \"  You can press <Prefix> $trigger_key\";  \
 		  echo \"  in this pane to restore it back here...\";  \
-		  bash -c \"while true ; do sleep 6; done\""
+		  /bin/sh -c \"while true ; do sleep 6; done\""
         $TMUX_BIN select-pane -T "$placeholder_title"
 	placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
