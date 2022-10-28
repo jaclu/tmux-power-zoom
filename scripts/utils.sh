@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 #   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
 #   License: MIT
@@ -27,7 +27,7 @@ plugin_name="tmux-power-zoom"
 #  impact. In all calls to tmux I use $TMUX_BIN instead in the rest of this
 #  plugin.
 #
-[ -z "$TMUX_BIN" ] && TMUX_BIN="tmux"
+[[ -z "$TMUX_BIN" ]] && TMUX_BIN="tmux"
 
 
 #
@@ -41,7 +41,7 @@ plugin_name="tmux-power-zoom"
 #  If $log_file is empty or undefined, no logging will occur.
 #
 log_it() {
-    if [ -z "$log_file" ]; then
+    if [[ -z "$log_file" ]]; then
         return
     fi
     printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$@" >> "$log_file"
@@ -58,7 +58,7 @@ error_msg() {
 
     log_it "$msg"
     $TMUX_BIN display-message "$plugin_name $msg"
-    [ "$exit_code" -ne 0 ] && exit "$exit_code"
+    [[ "$exit_code" -ne 0 ]] && exit "$exit_code"
 }
 
 
@@ -97,7 +97,7 @@ get_tmux_option() {
     gto_option=$1
     gto_default_value=$2
     gto_value=$($TMUX_BIN show-option -gqv "$gto_option")
-    if [ -z "$gto_value" ]; then
+    if [[ -z "$gto_value" ]]; then
         echo "$gto_default_value"
     else
         echo "$gto_value"
