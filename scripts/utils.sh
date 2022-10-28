@@ -20,6 +20,12 @@ plugin_name="tmux-power-zoom"
 
 
 #
+#  By using Z as default we don't overwrite the default zoom binding (z)
+#  unless the caller actually want this to happen.
+#
+default_key="Z"
+
+#
 #  I use an env var TMUX_BIN to point at the current tmux, defined in my
 #  tmux.conf, in order to pick the version matching the server running.
 #  If not found, it is set to whatever is in path, so should have no negative

@@ -20,13 +20,6 @@ SCRIPTS_DIR="$CURRENT_DIR/scripts"
 
 
 #
-#  By using Z as default we don't overwrite the default zoom binding (z)
-#  unless the caller actually want this to happen.
-#
-default_key="Z"
-
-
-#
 #  By printing a NL and date, its easier to keep separate runs apart
 #
 log_it ""
