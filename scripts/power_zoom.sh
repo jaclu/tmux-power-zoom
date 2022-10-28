@@ -63,14 +63,14 @@ check_pz_status() {
                 # its ok to return early
                 log_it ">> this is zoomed"
                 return  # implicit true
-            elif [[ $1 = $GET_PLACEHOLDER ]]; then
+            elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
                 result=$placeholder
                 do_update=true
 
                 log_it "get placeholder, found it"
                 continue  # dont save current pair in the update
             fi
-        elif [[ $placeholder = $current_pane_id ]] && [[ $1 = $GET_ZOOMED ]]; then
+        elif [[ $placeholder = "$current_pane_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             log_it "this is a placeholder for $zoomed"
             result=$zoomed
             break
