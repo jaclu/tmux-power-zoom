@@ -92,11 +92,11 @@ check_pz_status() {
 }
 
 power_zoom() {
-    if check_pz_status $IS_ZOOMED ; then
+    if check_pz_status "$IS_ZOOMED" ; then
         #
         #  Is a zoomed pane, un-zoom it
         #
-        placeholder="$(check_pz_status $GET_PLACEHOLDER)"
+        placeholder="$(check_pz_status "$GET_PLACEHOLDER")"
         
         if [[ -z $placeholder ]]; then
             error_msg "Placeholder for pane is not listed"
@@ -105,7 +105,7 @@ power_zoom() {
         $TMUX_BIN kill-pane -t "$placeholder"
         return
     fi
-    zoomed="$(check_pz_status $GET_ZOOMED)"
+    zoomed="$(check_pz_status "$GET_ZOOMED")"
     if [[ -n "$zoomed" ]]; then
         if [[ -n "$1" ]]; then
             error_msg "Recursion detected when unzooming"
