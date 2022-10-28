@@ -23,7 +23,6 @@ GET_ZOOMED="get_zoomed"
 
 set_pz_status() {
     local value="$1"
-    log_it ">> new @power_zoom_state [$value]"
     if [[ -n $value ]]; then
         $TMUX_BIN set-option @power_zoom_state "$value"
     else
@@ -135,7 +134,6 @@ power_zoom() {
         #
 	# shellcheck disable=SC2154
 	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
-	log_it ">> trigger: $trigger_key"
 
         #
         #  What an unexpected pain, doing a while loop in a sub shell fails if
@@ -145,7 +143,7 @@ power_zoom() {
 		  echo \"  placeholder for zoomed pane ${this_id}\";  \
 		  echo ; echo \"  You can press <Prefix> $trigger_key\";  \
 		  echo \"  in this pane to restore it back here...\";  \
-		  /bin/sh -c \"while true ; do sleep 6; done\""
+		  /bin/sh -c \"while true ; do sleep 300; done\""
         $TMUX_BIN select-pane -T "$placeholder_title"
 	placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
