@@ -43,6 +43,9 @@ check_pz_status() {
     local result
     local pow_zoomed_panes
     local placeholder
+    local zoomed
+    local sune
+    
     case $1 in
 
         "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED" ) ;;
@@ -130,13 +133,13 @@ power_zoom() {
         #
 	# shellcheck disable=SC2154
 	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
-        $TMUX_BIN split-window -b "echo; echo \"  $placeholder_title\n  Press [<Prefix> $trigger_key] in this pane to restore it back here...\"; while true ; do sleep 30; done"
+        $TMUX_BIN split-window -b "echo; echo \"  placeholder for zoomed pane $this_id\n  Press [<Prefix> $trigger_key] in this pane to restore it back here...\"; while true ; do sleep 30; done"
         $TMUX_BIN select-pane -T "$placeholder_title"
         placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
         $TMUX_BIN select-pane -t "$this_id"
         $TMUX_BIN break-pane  # move it to new window
-        $TMUX_BIN rename-window "**POWER ZOOM** ($primary_pane_id)"
+        $TMUX_BIN rename-window "ZOOMED $this_id"
     fi
 }
 
