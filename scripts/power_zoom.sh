@@ -43,7 +43,7 @@ check_pz_status() {
     local pow_zoomed_panes
     local placeholder
     local zoomed
-    
+
     case $1 in
 
         "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED" ) ;;
@@ -73,6 +73,7 @@ check_pz_status() {
             fi
         elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             result=$zoomed
+            # wont be doing updates, so no need to complete the loop
             break
         fi
         updated_values="$updated_values $placeholder=$zoomed"
@@ -92,12 +93,12 @@ check_pz_status() {
 
 power_zoom() {
     if check_pz_status "$IS_ZOOMED" ; then
-	log_it "was zoomed"
+        log_it "was zoomed"
         #
         #  Is a zoomed pane, un-zoom it
         #
         placeholder="$(check_pz_status "$GET_PLACEHOLDER")"
-        
+
         if [[ -z $placeholder ]]; then
             error_msg "Placeholder for pane is not listed"
         fi
@@ -107,7 +108,7 @@ power_zoom() {
     fi
     zoomed="$(check_pz_status "$GET_ZOOMED")"
     if [[ -n "$zoomed" ]]; then
-	log_it "was placeholder"
+        log_it "was placeholder"
         if [[ -n "$1" ]]; then
             error_msg "Recursion detected when unzooming"
             exit 1
@@ -121,9 +122,9 @@ power_zoom() {
         #
         #  Zoom it!
         #
-	log_it "will zoom"
+        log_it "will zoom"
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
-             error_msg "Can't zoom only pane in a window"             
+             error_msg "Can't zoom only pane in a window"
         fi
         this_id="$($TMUX_BIN display -p '#D')"
         #
@@ -132,20 +133,20 @@ power_zoom() {
         #  Ctrl-C would exit script and pane would close in case the zoomed pane
         #  is killed and the place-holder is left hanging.
         #
-	# shellcheck disable=SC2154
-	trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
+        # shellcheck disable=SC2154
+        trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 
         #
         #  What an unexpected pain, doing a while loop in a sub shell fails if
         #  the shel is fish. Luckily in this case I could wrap it in /bin/sh -c "foo"
         #
         $TMUX_BIN split-window -b "echo; \
-		  echo \"  placeholder for zoomed pane ${this_id}\";  \
-		  echo ; echo \"  You can press <Prefix> $trigger_key\";  \
-		  echo \"  in this pane to restore it back here...\";  \
-		  /bin/sh -c \"while true ; do sleep 300; done\""
+            echo \"  placeholder for zoomed pane ${this_id}\";  \
+            echo ; echo \"  You can press <Prefix> $trigger_key\";  \
+            echo \"  in this pane to restore it back here...\";  \
+            /bin/sh -c \"while true ; do sleep 300; done\""
         $TMUX_BIN select-pane -T "$placeholder_title"
-	placholder_pane_id="$($TMUX_BIN display -p '#D')"
+        placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
         $TMUX_BIN select-pane -t "$this_id"
         $TMUX_BIN break-pane  # move it to new window
