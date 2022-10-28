@@ -80,5 +80,10 @@ if bool_param "$(get_tmux_option "@power_zoom_without_prefix" "No")"; then
     log_it "Not using prefix"
 fi
 
+#
+#  Debug - clear list of zoomed panes
+#
+$TMUX_BIN set-option -U @power_zoom_state
+
 # shellcheck disable=SC2086  #options cant be quoted
 $TMUX_BIN bind $options "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
