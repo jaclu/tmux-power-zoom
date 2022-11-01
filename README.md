@@ -10,6 +10,7 @@ pane.
 
 ## Recent changes
 
+- Recent changes resulted in compatiblity with tmux 2.0
 - Repeated zooms of the same pane now works as expected
 - Made to work when shell is fish, what an odd beast that is...
 - Fixed some issues that prevented this to run on older versions of tmux.
@@ -43,7 +44,7 @@ If `@power_zoom_mouse_action` is defined, that mouse action also toggles
 
 ### Dependencies
 
-`tmux 2.6` or higher. Needs select-pane -T option. Could be made to work on
+`tmux 2.0` or higher. Needs select-pane -T option. Could be made to work on
 earlier version with a bit of rewrite, if anybody has such a need,
 create an Issue.
 
