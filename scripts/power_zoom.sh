@@ -33,7 +33,6 @@ set_pz_status() {
 
 read_pz_status() {
     statuses="$($TMUX_BIN show-option -qv @power_zoom_state)"
-    log_it "read_pz_status() gives: $statuses"
     echo "$statuses"
 }
 
@@ -84,11 +83,7 @@ check_pz_status() {
         fi
         updated_values="$updated_values $placeholder=$zoomed"
     done
-    log_it "New status: $updated_values"
-    if $do_update; then 
-        set_pz_status "$updated_values"
-        log_it "Status changed"
-    fi
+    $do_update && set_pz_status "$updated_values"
     if [[ -n "$result" ]]; then
         # In this case a string is expected, so the implicit true return
         # has no significance
