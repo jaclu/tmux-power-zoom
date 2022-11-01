@@ -28,7 +28,7 @@ This plugin zooms panes into a new window and makes it convenient to open suppor
 panes. Hitting Smart Zoom again unzooms and move the pane back to it's
 original location. The temp window closes, if no other panes are present.
 
-The temp windows name uses title and ID of the zoomed pane, so that if other
+The temp windows name uses ID of the zoomed pane, so that if other
 panes were open and left running, there is a hint about
 the purpose of that window.
 
