@@ -78,8 +78,10 @@ check_pz_status() {
         fi
         updated_values="$updated_values $placeholder=$zoomed"
     done
-    if $do_update; then
+    log_it "New status: $updated_values"
+    if $do_update; then 
         set_pz_status "$updated_values"
+        log_it "Status changed"
     fi
     if [[ -n "$result" ]]; then
         # In this case a string is expected, so the implicit true return
