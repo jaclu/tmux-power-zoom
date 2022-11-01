@@ -111,7 +111,7 @@ power_zoom() {
         log_it "was placeholder"
         if [[ -n "$1" ]]; then
             error_msg "Recursion detected when unzooming"
-            exit 1
+            exit 99
         fi
         #
         #  Keep code simple, only use one unzoom procedure
