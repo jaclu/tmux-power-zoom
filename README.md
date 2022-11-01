@@ -10,6 +10,7 @@ pane.
 
 ## Recent changes
 
+- Repeated zooms of the same pane now works as expected
 - Made to work when shell is fish, what an odd beast that is...
 - Fixed some issues that prevented this to run on older versions of tmux.
 Now retested to be usable all the way back to tmux 2.6
