@@ -23,6 +23,7 @@ GET_ZOOMED="get_zoomed"
 
 set_pz_status() {
     local value="$1"
+    log_it "set_pz_status($value)"
     if [[ -n $value ]]; then
         $TMUX_BIN set-option @power_zoom_state "$value"
     else
@@ -32,6 +33,7 @@ set_pz_status() {
 
 read_pz_status() {
     statuses="$($TMUX_BIN show-option -qv @power_zoom_state)"
+    log_it "read_pz_status() gives: $statuses"
     echo "$statuses"
 }
 
@@ -69,11 +71,15 @@ check_pz_status() {
             elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
                 result=$placeholder
                 do_update=true
-                continue  # dont save current pair in the update
+                #  this will result in unzooming, so dont save current pair 
+                #  in the update
+                continue  
             fi
         elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             result=$zoomed
-            # wont be doing updates, so no need to complete the loop
+            #  wont be doing updates this run, this will just trigger recursion 
+            #  by the caller, when unzooming and list update will happen,
+            #  so no need to complete the loop
             break
         fi
         updated_values="$updated_values $placeholder=$zoomed"
