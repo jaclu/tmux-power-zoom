@@ -24,9 +24,9 @@ GET_ZOOMED="get_zoomed"
 set_pz_status() {
     local value="$1"
     log_it "set_pz_status($value)"
-    if [[ -n $value ]]; then
-        $TMUX_BIN set-option @power_zoom_state "$value"
-    else
+    $TMUX_BIN set-option @power_zoom_state "$value"
+    if [[ -z $value ]]; then
+        log_it "unsetting @power_zoom_state"
         $TMUX_BIN set-option -U @power_zoom_state
     fi
 }
