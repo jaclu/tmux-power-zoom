@@ -100,7 +100,7 @@ bool_param() {
 
 get_tmux_option() {
     local option
-    lcal default_value
+    local default_value
     local value
 
     option=$1
