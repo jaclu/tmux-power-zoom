@@ -80,7 +80,7 @@ fi
 #  havoc, the zoomed pane is left intact and dead placeholders can easily be
 #  killed.
 #
-$TMUX_BIN set-option -U @power_zoom_state
+$TMUX_BIN set-option @power_zoom_state ""
 
 # shellcheck disable=SC2086  #options cant be quoted
 $TMUX_BIN bind $options "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
