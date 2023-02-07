@@ -51,20 +51,6 @@ if [[ -n "$mouse_action" ]]; then
     log_it "Mouse action: $mouse_action"
 fi
 
-#
-#  Obsolete, will soon be removed!
-#
-if bool_param "$(get_tmux_option "@power_zoom_mouse" "No")"; then
-    #
-    #  First select the mouse-over pane, then trigger zoom, otherwise the
-    #  focused pane would get zoomed, and not the clicked one.
-    #
-    log_it "OBSOLETE setting @power_zoom_mouse found!"
-    # shellcheck disable=SC2086  #options cant be quoted
-    $TMUX_BIN bind $options -n DoubleClick3Pane "$mouse_cmd"
-fi
-
-
 trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 log_it "trigger_key=[$trigger_key]"
 
