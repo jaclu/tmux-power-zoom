@@ -88,7 +88,7 @@ Contributions are welcome, and they're appreciated. Every little bit
 helps, and credit is always given.
 
 The best way to send feedback is to file an issue at
-https://github.com/jaclu/tmux-menus/issues
+[tmux-power-zoom/issues](https://github.com/jaclu/tmux-power-zoom/issues)
 
 ##### License
 
