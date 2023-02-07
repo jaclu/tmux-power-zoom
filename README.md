@@ -10,6 +10,7 @@ pane.
 
 ## Recent changes
 
+- Removed a previous config variable `power_zoom_mouse`
 - Recent changes resulted in compatiblity with tmux 2.0
 - Repeated zooms of the same pane now works as expected
 - Made to work when shell is fish, what an odd beast that is...
@@ -80,7 +81,6 @@ Option | Default | Description
 `@power_zoom_trigger` | Z | Key that triggers Power Zoom to toggle
 `@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>`
 `@power_zoom_mouse_action`          |       | Defines a mouse action trigger, supports modifiers<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>S-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane
-`@power_zoom_mouse` | 0 | >> OBSOLETE - Will be removed soon! <<<br/>If set to 1, right double click toggles Power Zoom
 
 ## Contributing
 
