@@ -10,7 +10,6 @@
 #
 # shellcheck disable=SC2154
 
-
 # shellcheck disable=SC1007
 CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
@@ -43,36 +42,36 @@ check_pz_status() {
 
     case $1 in
 
-        "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED" ) ;;
+    "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED") ;;
 
-        *)
-            error_msg "ERROR: check_pz_status - invalid param: [$1]"
-            ;;
+    *)
+        error_msg "ERROR: check_pz_status - invalid param: [$1]"
+        ;;
     esac
 
     this_id="$($TMUX_BIN display -p '#D')"
     updated_values=""
     do_update=false
     result=""
-    pow_zoomed_panes=( $(read_pz_status) )
-    for pzp in "${pow_zoomed_panes[@]}" ; do
+    pow_zoomed_panes=($(read_pz_status))
+    for pzp in "${pow_zoomed_panes[@]}"; do
         placeholder="$(echo "$pzp" | cut -d= -f 1)"
         zoomed="$(echo "$pzp" | cut -d= -f 2)"
-        if [[ $zoomed = "$this_id" ]];  then
+        if [[ $zoomed = "$this_id" ]]; then
             if [[ $1 = "$IS_ZOOMED" ]]; then
                 # Since this check won't update the list of zoomed panes
                 # its ok to return early
-                return  # implicit true
+                return # implicit true
             elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
                 result=$placeholder
                 do_update=true
-                #  this will result in unzooming, so dont save current pair 
+                #  this will result in unzooming, so dont save current pair
                 #  in the update
-                continue  
+                continue
             fi
         elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             result=$zoomed
-            #  wont be doing updates this run, this will just trigger recursion 
+            #  wont be doing updates this run, this will just trigger recursion
             #  by the caller, when unzooming and list update will happen,
             #  so no need to complete the loop
             break
@@ -89,9 +88,8 @@ check_pz_status() {
     fi
 }
 
-
 power_zoom() {
-    if check_pz_status "$IS_ZOOMED" ; then
+    if check_pz_status "$IS_ZOOMED"; then
         log_it "was zoomed"
         #
         #  Is a zoomed pane, un-zoom it
@@ -123,7 +121,8 @@ power_zoom() {
         #
         log_it "will zoom"
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
-             error_msg "Can't zoom only pane in a window"
+            error_msg "Can't zoom only pane in a window"
+            exit 0
         fi
         this_id="$($TMUX_BIN display -p '#D')"
         #
@@ -148,7 +147,7 @@ power_zoom() {
         placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
         $TMUX_BIN select-pane -t "$this_id"
-        $TMUX_BIN break-pane  # move it to new window
+        $TMUX_BIN break-pane # move it to new window
         $TMUX_BIN rename-window "ZOOMED $this_id"
     fi
 }
