@@ -23,6 +23,7 @@ plugin_name="tmux-power-zoom"
 #  By using Z as default we don't overwrite the default zoom binding (z)
 #  unless the caller actually want this to happen.
 #
+# shellcheck disable=SC2034
 default_key="Z"
 
 #

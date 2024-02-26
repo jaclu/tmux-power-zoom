@@ -58,7 +58,7 @@ Hit `prefix + I` to fetch the plugin and source it.
 
 ### Manual installation
 
-Clone the repo:
+Clone the repository:
 
 ```bash
 git clone https://github.com/jaclu/tmux-power-zoom.git ~/clone/path

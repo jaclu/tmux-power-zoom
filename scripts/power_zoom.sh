@@ -27,8 +27,7 @@ set_pz_status() {
 }
 
 read_pz_status() {
-    statuses="$($TMUX_BIN show-option -qv @power_zoom_state)"
-    echo "$statuses"
+    $TMUX_BIN show-option -qv @power_zoom_state
 }
 
 check_pz_status() {
@@ -53,7 +52,10 @@ check_pz_status() {
     updated_values=""
     do_update=false
     result=""
-    pow_zoomed_panes=($(read_pz_status))
+
+    # Split the status into an array
+    IFS=', ' read -r -a pow_zoomed_panes <<< "$(read_pz_status)"
+
     for pzp in "${pow_zoomed_panes[@]}"; do
         placeholder="$(echo "$pzp" | cut -d= -f 1)"
         zoomed="$(echo "$pzp" | cut -d= -f 2)"
