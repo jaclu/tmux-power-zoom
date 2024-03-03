@@ -3,4 +3,4 @@
 tests/
 .DS_Store
 *.sublime-*
-.vscode/
+.vscode/.shellchecker.cache
