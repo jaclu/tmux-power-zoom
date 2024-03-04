@@ -3,4 +3,6 @@
 tests/
 .DS_Store
 *.sublime-*
-.vscode/.shellchecker.cache
+
+# olint linter config
+.cache.olint
