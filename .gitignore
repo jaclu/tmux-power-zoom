@@ -5,4 +5,5 @@ tests/
 *.sublime-*
 
 # olint linter config
+.olint.conf
 .cache.olint
