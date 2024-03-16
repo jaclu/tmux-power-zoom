@@ -88,6 +88,6 @@ helps, and credit is always given.
 The best way to send feedback is to file an issue at
 [tmux-power-zoom/issues](https://github.com/jaclu/tmux-power-zoom/issues)
 
-##### License
+### License
 
 [MIT](LICENSE.md)
