@@ -25,7 +25,7 @@ SCRIPTS_DIR="$CURRENT_DIR/scripts"
 log_it ""
 log_it "$(date)"
 
-options=""
+set --
 #
 #  Generic plugin setting I use to add Notes to plugin keys that are bound
 #  This makes this key binding show up when doing <prefix> ?
@@ -33,7 +33,7 @@ options=""
 #  bind-key Notes were added in tmux 3.1, so should not be used on older versions!
 #
 if bool_param "$(get_tmux_option "@use_bind_key_notes_in_plugins" "No")"; then
-    options+=" -N plugin:$plugin_name"
+    set -- "$@" -N "plugin: $plugin_name"
 fi
 
 mouse_action="$(get_tmux_option "@power_zoom_mouse_action")"
@@ -55,7 +55,7 @@ trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 log_it "trigger_key=[$trigger_key]"
 
 if bool_param "$(get_tmux_option "@power_zoom_without_prefix" "No")"; then
-    options+=" -n"
+    set -- "$@" -n
     log_it "Not using prefix"
 fi
 
@@ -69,4 +69,4 @@ fi
 $TMUX_BIN set-option @power_zoom_state ""
 
 # shellcheck disable=SC2086  #options cant be quoted
-$TMUX_BIN bind $options "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
+$TMUX_BIN bind-key "$@" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh
