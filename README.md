@@ -12,7 +12,7 @@ pane.
 
 - Had forgotten to abort if attempt to zoom only pane - fixed
 - Removed a previous config variable `power_zoom_mouse`
-- Recent changes resulted in compatiblity with tmux 2.0
+- Recent changes resulted in compatibility with tmux 2.0
 - Repeated zooms of the same pane now works as expected
 - Made to work when shell is fish, what an odd beast that is...
 - Fixed some issues that prevented this to run on older versions of tmux.

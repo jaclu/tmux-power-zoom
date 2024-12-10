@@ -46,7 +46,7 @@ if [[ -n "$mouse_action" ]]; then
 
     # shellcheck disable=SC2089
     mouse_cmd="select-pane -t= \; run-shell -t= \"$SCRIPTS_DIR/power_zoom.sh\""
-    # shellcheck disable=SC2086,2090  #options & mouse_cmd cant be quoted
+    # shellcheck disable=SC2086,2090  #options & mouse_cmd can't be quoted
     $TMUX_BIN bind $options -n "$mouse_action" $mouse_cmd
     log_it "Mouse action: $mouse_action"
 fi
@@ -68,5 +68,5 @@ fi
 #
 $TMUX_BIN set-option @power_zoom_state ""
 
-# shellcheck disable=SC2086  #options cant be quoted
+# shellcheck disable=SC2086  #options can't be quoted
 $TMUX_BIN bind-key "$@" "$trigger_key" run-shell "$SCRIPTS_DIR"/power_zoom.sh

@@ -1,0 +1,7 @@
+---
+
+MD013: false
+
+MD033:
+  # Allowed elements
+  allowed_elements: [br]

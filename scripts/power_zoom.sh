@@ -73,7 +73,7 @@ check_pz_status() {
             fi
         elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
             result=$zoomed
-            #  wont be doing updates this run, this will just trigger recursion
+            #  won't be doing updates this run, this will just trigger recursion
             #  by the caller, when unzooming and list update will happen,
             #  so no need to complete the loop
             break
