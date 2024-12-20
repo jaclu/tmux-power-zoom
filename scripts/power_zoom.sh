@@ -13,7 +13,7 @@
 # shellcheck disable=SC1007
 CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
-# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 . "$CURRENT_DIR/utils.sh"
 
 IS_ZOOMED="is_zoomed"
@@ -67,7 +67,7 @@ check_pz_status() {
             elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
                 result=$placeholder
                 do_update=true
-                #  this will result in unzooming, so dont save current pair
+                #  this will result in unzooming, so don't save current pair
                 #  in the update
                 continue
             fi

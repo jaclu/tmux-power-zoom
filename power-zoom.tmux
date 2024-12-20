@@ -15,7 +15,7 @@ CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 SCRIPTS_DIR="$CURRENT_DIR/scripts"
 
-# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 . "$SCRIPTS_DIR/utils.sh"
 
 

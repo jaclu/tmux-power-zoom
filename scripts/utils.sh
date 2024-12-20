@@ -47,6 +47,7 @@ default_key="Z"
 #  If $log_file is empty or undefined, no logging will occur.
 #
 log_it() {
+    # shellcheck disable=SC2154
     if [[ -z "$log_file" ]]; then
         return
     fi
