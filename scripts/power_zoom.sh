@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
+#   Copyright (c) 2022,2025: Jacob.Lundqvist@gmail.com
 #   License: MIT
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
@@ -11,14 +11,14 @@
 # shellcheck disable=SC2154
 
 # shellcheck disable=SC1007
-CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+D_SCRIPTS=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 # shellcheck source=/dev/null
-. "$CURRENT_DIR/utils.sh"
+. "$D_SCRIPTS/utils.sh"
 
-IS_ZOOMED="is_zoomed"
-GET_PLACEHOLDER="get_placeholder"
-GET_ZOOMED="get_zoomed"
+is_zoomed="is_zoomed"
+get_placeholder="get_placeholder"
+get_zoomed="get_zoomed"
 
 set_pz_status() {
     local value="$1"
@@ -41,7 +41,7 @@ check_pz_status() {
 
     case $1 in
 
-    "$IS_ZOOMED" | "$GET_PLACEHOLDER" | "$GET_ZOOMED") ;;
+    "$is_zoomed" | "$get_placeholder" | "$get_zoomed") ;;
 
     *)
         error_msg "ERROR: check_pz_status - invalid param: [$1]"
@@ -54,24 +54,24 @@ check_pz_status() {
     result=""
 
     # Split the status into an array
-    IFS=', ' read -r -a pow_zoomed_panes <<< "$(read_pz_status)"
+    IFS=', ' read -r -a pow_zoomed_panes <<<"$(read_pz_status)"
 
     for pzp in "${pow_zoomed_panes[@]}"; do
         placeholder="$(echo "$pzp" | cut -d= -f 1)"
         zoomed="$(echo "$pzp" | cut -d= -f 2)"
         if [[ $zoomed = "$this_id" ]]; then
-            if [[ $1 = "$IS_ZOOMED" ]]; then
+            if [[ $1 = "$is_zoomed" ]]; then
                 # Since this check won't update the list of zoomed panes
                 # its ok to return early
                 return # implicit true
-            elif [[ $1 = "$GET_PLACEHOLDER" ]]; then
+            elif [[ $1 = "$get_placeholder" ]]; then
                 result=$placeholder
                 do_update=true
                 #  this will result in unzooming, so don't save current pair
                 #  in the update
                 continue
             fi
-        elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$GET_ZOOMED" ]]; then
+        elif [[ $placeholder = "$this_id" ]] && [[ $1 = "$get_zoomed" ]]; then
             result=$zoomed
             #  won't be doing updates this run, this will just trigger recursion
             #  by the caller, when unzooming and list update will happen,
@@ -91,12 +91,12 @@ check_pz_status() {
 }
 
 power_zoom() {
-    if check_pz_status "$IS_ZOOMED"; then
+    if check_pz_status "$is_zoomed"; then
         log_it "was zoomed"
         #
         #  Is a zoomed pane, un-zoom it
         #
-        placeholder="$(check_pz_status "$GET_PLACEHOLDER")"
+        placeholder="$(check_pz_status "$get_placeholder")"
 
         if [[ -z $placeholder ]]; then
             error_msg "Placeholder for pane is not listed"
@@ -105,7 +105,7 @@ power_zoom() {
         $TMUX_BIN kill-pane -t "$placeholder"
         return
     fi
-    zoomed="$(check_pz_status "$GET_ZOOMED")"
+    zoomed="$(check_pz_status "$get_zoomed")"
     if [[ -n "$zoomed" ]]; then
         log_it "was placeholder"
         if [[ -n "$1" ]]; then

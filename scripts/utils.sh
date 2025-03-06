@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   Copyright (c) 2022: Jacob.Lundqvist@gmail.com
+#   Copyright (c) 2022,2025: Jacob.Lundqvist@gmail.com
 #   License: MIT
 #
 #   Part of https://github.com/jaclu/tmux-power-zoom
@@ -18,7 +18,6 @@
 #
 plugin_name="tmux-power-zoom"
 
-
 #
 #  By using Z as default we don't overwrite the default zoom binding (z)
 #  unless the caller actually want this to happen.
@@ -35,69 +34,31 @@ default_key="Z"
 #
 [[ -z "$TMUX_BIN" ]] && TMUX_BIN="tmux"
 
-
 #
 #  If log_file is empty or undefined, no logging will occur,
 #  so comment it out for normal usage.
 #
-# log_file="/tmp/$plugin_name.log"  # Trigger LF to separate runs of this script
+# log_file=~/tmp/"$plugin_name".log
 
-
-#
-#  If $log_file is empty or undefined, no logging will occur.
-#
 log_it() {
-    # shellcheck disable=SC2154
+    #  If $log_file is empty or undefined, no logging will occur.
     if [[ -z "$log_file" ]]; then
         return
     fi
-    printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$@" >> "$log_file"
+    printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$@" >>"$log_file"
 }
 
-
-#
-#  Display $1 as an error message in log and as a tmux display-message
-#  If no $2 or set to 0, process is not exited
-#
 error_msg() {
+    #
+    #  Display $1 as an error message in log and as a tmux display-message
+    #  If no $2 or set to 0, process is not exited
+    #
     msg="ERROR: $1"
-    exit_code="${2:-0}"
+    exit_code="${2:-1}"
 
     log_it "$msg"
     $TMUX_BIN display-message "$plugin_name $msg"
-    [[ "$exit_code" -ne 0 ]] && exit "$exit_code"
-}
-
-
-#
-#  Aargh in shell boolean true is 0, but to make the boolean parameters
-#  more relatable for users 1 is yes and 0 is no, so we need to switch
-#  them here in order for assignment to follow boolean logic in caller
-#
-bool_param() {
-    case "$1" in
-
-        "0") return 1 ;;
-
-        "1") return 0 ;;
-
-        "yes" | "Yes" | "YES" | "true" | "True" | "TRUE" )
-            #  Be a nice guy and accept some common positives
-            return 0
-            ;;
-
-        "no" | "No" | "NO" | "false" | "False" | "FALSE" )
-            #  Be a nice guy and accept some common negatives
-            return 1
-            ;;
-
-        *)
-            log_it "Invalid parameter bool_param($1)"
-            error_msg "bool_param($1) - should be 0 or 1"
-            ;;
-
-    esac
-    return 1 # default to False
+    [[ "$exit_code" -gt 0 ]] && exit "$exit_code"
 }
 
 get_tmux_option() {
@@ -113,4 +74,71 @@ get_tmux_option() {
     else
         echo "$value"
     fi
+}
+
+lowercase_it() {
+    echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+normalize_bool_param() {
+    #
+    #  Take a boolean style text param and convert it into an actual boolean
+    #  that can be used in your code. Example of usage:
+    #
+    #  normalize_normalize_bool_param "@menus_without_prefix" "$default_no_prefix" &&
+    #      cfg_no_prefix=true || cfg_no_prefix=false
+    #
+    #  $cfg_no_prefix && echo "Don't use prefix"
+    #
+    local nbp_param="$1"
+    local nbp_default="$2" # only used for tmux options
+    local nbp_variable_name=""
+    local prefix
+
+    # log_it "normalize_normalize_bool_param($nbp_param, $nbp_default) [$nbp_variable_name]"
+    [[ "${nbp_param%"${nbp_param#?}"}" = "@" ]] && {
+        #
+        #  If it starts with "@", assume it is a tmux option, thus
+        #  read its value from the tmux environment.
+        #  In this case $2 must be given as the default value!
+        #
+        [[ -z "$nbp_default" ]] && {
+            error_msg "normalize_normalize_bool_param($nbp_param) - no default"
+        }
+        nbp_variable_name="$nbp_param"
+        nbp_param="$(tmux_get_option "$nbp_param" "$nbp_default")"
+    }
+
+    nbp_param="$(lowercase_it "$nbp_param")"
+
+    case "$nbp_param" in
+    #
+    #  Handle the unfortunate tradition in the tmux community to use
+    #  1 to indicate selected / active.
+    #  This means that as far as these booleans go 1 is 0 and 0 is 1, how Orwellian...
+    #
+    1 | yes | true)
+        #  Be a nice guy and accept some common positive notations
+        return 0
+        ;;
+
+    0 | no | false)
+        #  Be a nice guy and accept some common false notations
+        return 1
+        ;;
+
+    *)
+        if [[ -n "$nbp_variable_name" ]]; then
+            prefix="$nbp_variable_name=$nbp_param"
+        else
+            prefix="$nbp_param"
+        fi
+        error_msg "$prefix - should be yes/true or no/false"
+        ;;
+
+    esac
+
+    # Should never get here...
+    log_it "Invalid parameter normalize_bool_param($1)"
+    error_msg "normalize_normalize_bool_param() - failed to evaluate $nbp_param"
 }
