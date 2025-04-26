@@ -58,6 +58,7 @@ error_msg() {
 
     log_it "$msg"
     $TMUX_BIN display-message "$plugin_name $msg"
+    sleep 1 # ensure message doesn't get overwritten immeditally
     [[ "$exit_code" -gt 0 ]] && exit "$exit_code"
 }
 

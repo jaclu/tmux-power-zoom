@@ -10,12 +10,11 @@ pane.
 
 ## Recent changes
 
+- Ignore `@power_zoom_mouse_action` if tmux < 3.0
 - Had forgotten to abort if attempt to zoom only pane - fixed
 - Removed a previous config variable `power_zoom_mouse`
 - Recent changes resulted in compatibility with tmux 2.0
 - Repeated zooms of the same pane now works as expected
-- Made to work when shell is fish, what an odd beast that is...
-- Fixed some issues that prevented this to run on older versions of tmux.
 
 ## Purpose
 
@@ -25,7 +24,7 @@ When opening a new pane this way, the new pane becomes squeezed in next
 to the original pane, often far to small to be practically usable.
 
 This plugin zooms panes into a new window and makes it convenient to open support
-panes. Hitting Smart Zoom again unzooms and move the pane back to it's
+panes. Hitting Zoom again unzooms and move the pane back to it's
 original location. The temp window closes, if no other panes are present.
 
 The temp windows name uses ID of the zoomed pane, so that if other
@@ -36,7 +35,7 @@ the purpose of that window.
 
 Hit `<prefix>` + `@power_zoom_trigger` to toggle Power Zoom.
 If `@power_zoom_mouse_action` is defined, that mouse action also toggles
- Power Zoom.
+Power Zoom.
 
 ## Install
 
@@ -74,11 +73,11 @@ Reload TMUX environment with `$ tmux source-file ~/.tmux.conf`, and that's it.
 
 ## Configuration options
 
-Option | Default | Description
--|-|-
-`@power_zoom_trigger` | Z | Key that triggers Power Zoom to toggle
-`@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>`
-`@power_zoom_mouse_action`          |       | Defines a mouse action trigger, supports modifiers<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>S-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane
+| Option                       | Default | Description                                                                                                                                                                                                    |
+| ---------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@power_zoom_trigger`        | Z       | Key that triggers Power Zoom to toggle                                                                                                                                                                         |
+| `@power_zoom_without_prefix` | 0       | If set to 1, trigger key is independent of `<prefix>`                                                                                                                                                          |
+| `@power_zoom_mouse_action`   |         | Defines a mouse action trigger, supports modifiers<br/>typically 1 is left button and 3 is right button<br/>Examples:<br/>DoubleClick3Pane<br/>S-DoubleClick3Pane<br/>M-DoubleClick3Pane<br/>TrippleClick1Pane |
 
 ## Contributing
 

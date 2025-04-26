@@ -16,6 +16,9 @@ D_SCRIPTS="$D_PLUGIN/scripts"
 # shellcheck source=scripts/utils.sh
 . "$D_SCRIPTS/utils.sh"
 
+# If logging is enabled, add spacer each time tmux starts up
+[[ -n "$log_file" ]] && log_it
+
 cmd_kb="bind-key"
 cmd_m="bind-key"
 
@@ -63,10 +66,24 @@ mouse_action="$(get_tmux_option "@power_zoom_mouse_action")"
 [[ -z "$mouse_action" ]] && exit 0  # no mouse action defined, setup is done
 
 #
+#  Simplistic check if tmux version is >= 3
+#
+tmux_vers_maj="$($TMUX_BIN -V | tr -dC '[:digit:]' | cut -c1)"
+if [[ "$tmux_vers_maj" -lt 3 ]]; then
+    error_msg "tmux < 3 doesn't support pane selection via mouse"
+fi
+
+# Dummy bind, to verify mouse action is valid
+$TMUX_BIN bind-key -n "$mouse_action" info 2>/dev/null || {
+    error_msg "Invalid mouse action: $mouse_action"
+}
+$TMUX_BIN unbind -n "$mouse_action" # remove dummy bind
+
+#
 #  First select the mouse-over pane, then trigger zoom, otherwise the
 #  focused pane would get zoomed, and not the clicked one.
 #
-mouse_cmd="select-pane -t= ; run-shell -t= $D_SCRIPTS/power_zoom.sh"
+mouse_cmd="resize-pane -Z -t= ; run-shell $D_SCRIPTS/power_zoom.sh"
 
 cmd_m+=" -n $mouse_action '$mouse_cmd'"
 eval "$TMUX_BIN $cmd_m" || {
