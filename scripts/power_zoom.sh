@@ -15,7 +15,7 @@ D_SCRIPTS=$(
     pwd
 )
 
-# shellcheck source=/dev/null
+# shellcheck source=scripts/utils.sh
 . "$D_SCRIPTS/utils.sh"
 
 is_zoomed="is_zoomed"
@@ -94,12 +94,13 @@ check_pz_status() {
 
 power_zoom() {
     if check_pz_status "$is_zoomed"; then
-        log_it "was zoomed"
         #
         #  Is a zoomed pane, un-zoom it
         #
-        placeholder="$(check_pz_status "$get_placeholder")"
+        log_it "was zoomed"
 
+        placeholder="$(check_pz_status "$get_placeholder")"
+        log_it "><> placeholder [$placeholder]"
         if [[ -z $placeholder ]]; then
             error_msg "Placeholder for pane is not listed"
         fi
@@ -112,10 +113,12 @@ power_zoom() {
     fi
     zoomed="$(check_pz_status "$get_zoomed")"
     if [[ -n "$zoomed" ]]; then
+        #
+        #  Is a placeholder pane, switch to zoomed pane then rerun this
+        #
         log_it "was placeholder"
 
         #  Keep code simple, only use one unzoom procedure
-        #
         $TMUX_BIN select-window -t "$zoomed"
         power_zoom recursion
     else
@@ -123,23 +126,15 @@ power_zoom() {
         #  Zoom it!
         #
         log_it "will zoom"
+
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
             error_msg "Can't zoom only pane in a window"
         fi
         this_id="$($TMUX_BIN display -p '#D')"
-        #
-        #  the place-holder pane will close when it's process is terminated,
-        #  so keep a long sleep going for ever in a loop.
-        #  Ctrl-C would exit script and pane would close in case the zoomed pane
-        #  is killed and the place-holder is left hanging.
-        #
-        # shellcheck disable=SC2154
         trigger_key=$(get_tmux_option "@power_zoom_trigger" "$default_key")
 
-        #
-        #  What an unexpected pain, doing a while loop in a sub shell fails if
-        #  the shel is fish. Luckily in this case I could wrap it in /bin/sh -c "foo"
-        #
+        # -b is needed in order for placeholder to come before current pane
+        #    othereise when unzooming the restored pane will only be half size
         $TMUX_BIN split-window -b "echo; \
             echo \"  placeholder for zoomed pane ${this_id}\";  \
             echo ; echo \"  You can press <Prefix> $trigger_key\";  \
