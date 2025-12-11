@@ -124,7 +124,6 @@ power_zoom() {
         log_it "will zoom"
         if [[ "$($TMUX_BIN list-panes | wc -l)" -eq 1 ]]; then
             error_msg "Can't zoom only pane in a window"
-            exit 0
         fi
         this_id="$($TMUX_BIN display -p '#D')"
         #
@@ -145,7 +144,7 @@ power_zoom() {
             echo ; echo \"  You can press <Prefix> $trigger_key\";  \
             echo \"  in this pane to restore it back here...\";  \
             /bin/sh -c \"while true ; do sleep 300; done\""
-        $TMUX_BIN select-pane -T "$placeholder_title"
+
         placholder_pane_id="$($TMUX_BIN display -p '#D')"
         set_pz_status "$(read_pz_status) $placholder_pane_id=$this_id"
         $TMUX_BIN select-pane -t "$this_id"
