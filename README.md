@@ -10,11 +10,11 @@ pane.
 
 ## Recent changes
 
+- some code cleanup
 - Ignore `@power_zoom_mouse_action` if tmux < 3.0
 - Had forgotten to abort if attempt to zoom only pane - fixed
 - Removed a previous config variable `power_zoom_mouse`
 - Recent changes resulted in compatibility with tmux 2.0
-- Repeated zooms of the same pane now works as expected
 
 ## Purpose
 
