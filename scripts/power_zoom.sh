@@ -8,10 +8,12 @@
 #   Tracking the placeholder pane by its pane title, this works regardless
 #   if pane titles are displayed or not.
 #
-# shellcheck disable=SC2154
 
-# shellcheck disable=SC1007
-D_SCRIPTS=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+D_SCRIPTS=$(
+    CDPATH=
+    cd -- "$(dirname -- "$0")" || exit 1
+    pwd
+)
 
 # shellcheck source=/dev/null
 . "$D_SCRIPTS/utils.sh"

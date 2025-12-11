@@ -8,8 +8,11 @@
 #   Dependency: 2.6 - select-pane -T introduced with this version
 #
 
-# shellcheck disable=SC1007
-D_PLUGIN=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+D_PLUGIN=$(
+    CDPATH=
+    cd -- "$(dirname -- "$0")" || exit 1
+    pwd
+)
 
 D_SCRIPTS="$D_PLUGIN/scripts"
 
