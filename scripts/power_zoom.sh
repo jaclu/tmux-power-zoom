@@ -43,11 +43,11 @@ check_pz_status() {
 
     case $1 in
 
-    "$is_zoomed" | "$get_placeholder" | "$get_zoomed") ;;
+        "$is_zoomed" | "$get_placeholder" | "$get_zoomed") ;;
 
-    *)
-        error_msg "ERROR: check_pz_status - invalid param: [$1]"
-        ;;
+        *)
+            error_msg "ERROR: check_pz_status - invalid param: [$1]"
+            ;;
     esac
 
     this_id="$($TMUX_BIN display -p '#D')"

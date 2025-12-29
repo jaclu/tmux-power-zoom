@@ -113,29 +113,29 @@ normalize_bool_param() {
     nbp_param="$(lowercase_it "$nbp_param")"
 
     case "$nbp_param" in
-    #
-    #  Handle the unfortunate tradition in the tmux community to use
-    #  1 to indicate selected / active.
-    #  This means that as far as these booleans go 1 is 0 and 0 is 1, how Orwellian...
-    #
-    1 | yes | true)
-        #  Be a nice guy and accept some common positive notations
-        return 0
-        ;;
+        #
+        #  Handle the unfortunate tradition in the tmux community to use
+        #  1 to indicate selected / active.
+        #  This means that as far as these booleans go 1 is 0 and 0 is 1, how Orwellian...
+        #
+        1 | yes | true)
+            #  Be a nice guy and accept some common positive notations
+            return 0
+            ;;
 
-    0 | no | false)
-        #  Be a nice guy and accept some common false notations
-        return 1
-        ;;
+        0 | no | false)
+            #  Be a nice guy and accept some common false notations
+            return 1
+            ;;
 
-    *)
-        if [[ -n "$nbp_variable_name" ]]; then
-            prefix="$nbp_variable_name=$nbp_param"
-        else
-            prefix="$nbp_param"
-        fi
-        error_msg "$prefix - should be yes/true or no/false"
-        ;;
+        *)
+            if [[ -n "$nbp_variable_name" ]]; then
+                prefix="$nbp_variable_name=$nbp_param"
+            else
+                prefix="$nbp_param"
+            fi
+            error_msg "$prefix - should be yes/true or no/false"
+            ;;
 
     esac
 

@@ -61,12 +61,11 @@ eval "$TMUX_BIN $cmd_kb" || {
 }
 log_it "using trigger: $trigger_key"
 
-
 #
 #  If @power_zoom_mouse_action is defined, also bind a mouse action to this
 #
 mouse_action="$(get_tmux_option "@power_zoom_mouse_action")"
-[[ -z "$mouse_action" ]] && exit 0  # no mouse action defined, setup is done
+[[ -z "$mouse_action" ]] && exit 0 # no mouse action defined, setup is done
 
 #
 #  Simplistic check if tmux version is >= 3
