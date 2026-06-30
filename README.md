@@ -8,6 +8,10 @@ risking getting a crowded mess of panes.
 You can also restore by triggering the power-zoom action on the place-holder
 pane.
 
+## Notice - Do not use this plugin on tmux 3.7!
+
+On tmux 3.7 `break-pane` causes tmux to instantly crash, so do not use this on 3.7!
+
 ## Recent changes
 
 - some code cleanup
