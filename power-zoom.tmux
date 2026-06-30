@@ -19,6 +19,13 @@ D_SCRIPTS="$D_PLUGIN/scripts"
 # shellcheck source=scripts/utils.sh
 . "$D_SCRIPTS/utils.sh"
 
+if [[ "$($TMUX_BIN -V)" = "tmux 3.7" ]]; then
+    # This plugin relies on using break-pane, and on tmux 3.7 using this causes
+    # tmux to crash instantly....
+    $TMUX_BIN display "[$plugin_name] tmux 3.7 is broken - aborting plugin init!"
+    exit 0
+fi
+
 # If logging is enabled, add spacer each time tmux starts up
 [[ -n "$log_file" ]] && log_it
 

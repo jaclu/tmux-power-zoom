@@ -8,19 +8,22 @@ risking getting a crowded mess of panes.
 You can also restore by triggering the power-zoom action on the place-holder
 pane.
 
-## Notice - Do not use this plugin on tmux 3.7!
+## Notice - tmux 3.7 is broken
 
-On tmux 3.7 `break-pane` causes tmux to instantly crash, so do not use this on 3.7!
+This plugin uses `break-pane` and on tmux 3.7 using it causes tmux to instantly crash.
 
 The tmux team is aware and the fix is already planned for 3.7a
 
+As a workaround, if this plugin is used on tmux 3.7, it will display an
+incompatibility warning and abort it's setup before binding any trigger.
+
 ## Recent changes
 
+- Plugin will refuse to init on tmux 3.7, and display a warning message.
 - some code cleanup
 - Ignore `@power_zoom_mouse_action` if tmux < 3.0
 - Had forgotten to abort if attempt to zoom only pane - fixed
 - Removed a previous config variable `power_zoom_mouse`
-- Recent changes resulted in compatibility with tmux 2.0
 
 ## Purpose
 
