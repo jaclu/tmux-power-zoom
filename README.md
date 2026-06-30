@@ -11,6 +11,7 @@ pane.
 ## Notice - Do not use this plugin on tmux 3.7!
 
 On tmux 3.7 `break-pane` causes tmux to instantly crash, so do not use this on 3.7!
+The tmux team is aware and the fix is already planned for 3.7a
 
 ## Recent changes
 
