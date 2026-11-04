@@ -1,0 +1,16 @@
+{
+  "plugins": {
+    "line-length": {
+      "enabled": true,
+      "line_length": 92,
+      "heading_line_length": 120,
+      "tables": false
+    },
+    "no-inline-html": {
+      "enabled": false
+    },
+    "table-column-style": {
+      "enabled": false
+    }
+  }
+}
