@@ -1,3 +1,0 @@
-[tool.pymarkdown]
-plugins.md033.allowed_elements = "br"
-plugins.md013.enabled = false
