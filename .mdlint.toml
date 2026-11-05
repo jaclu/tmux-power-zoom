@@ -1,0 +1,6 @@
+[rules.MD013]
+line_length = 92
+heading_line_length = 94
+
+[rules.MD033]
+allowed_elements = ['br']
